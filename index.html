@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATTX Detailing — Cotizador</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #060C17;
+      color: #FFFFFF;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       LAYOUT PRINCIPAL
+    ───────────────────────────────────────── */
+    .app-wrapper {
+      width: 100%;
+      min-height: 100%;
+      background-color: #060C17;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(30,58,99,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,58,99,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Contenedor central con max-width para desktop */
+    .page-center {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ─────────────────────────────────────────
+       HEADER / LOGO
+    ───────────────────────────────────────── */
+    .logo-container {
+      background: linear-gradient(135deg, #0a1628 0%, #0e1f3d 50%, #0a1628 100%);
+      border: 1px solid rgba(30, 58, 99, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ─────────────────────────────────────────
+       VEHICLE TOGGLE
+    ───────────────────────────────────────── */
+    .vehicle-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(30, 58, 99, 0.5);
+      border-radius: 12px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .toggle-btn {
+      padding: 10px 0;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.2px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 15px rgba(30, 58, 99, 0.5);
+    }
+
+    .toggle-btn.inactive {
+      background: transparent;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .toggle-btn.inactive:hover {
+      background: rgba(30, 58, 99, 0.2);
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ─────────────────────────────────────────
+       PLANS SCROLL
+    ───────────────────────────────────────── */
+    .plans-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 4px 0 8px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      user-select: none;
+    }
+    .plans-scroll::-webkit-scrollbar { display: none; }
+
+    .plan-card {
+      min-width: 175px;
+      flex-shrink: 0;
+      background: linear-gradient(145deg, rgba(30, 58, 99, 0.2) 0%, rgba(13, 30, 56, 0.15) 100%);
+      border: 2px solid rgba(30, 58, 99, 0.3);
+      border-radius: 14px;
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .plan-card:hover { border-color: rgba(30, 58, 99, 0.5); }
+
+    .plan-card.selected {
+      border-color: #4a7fd4;
+      background: linear-gradient(145deg, rgba(30, 58, 99, 0.4) 0%, rgba(13, 30, 56, 0.3) 100%);
+      box-shadow: 0 8px 24px rgba(74, 127, 212, 0.2);
+    }
+
+    .plan-card.featured {
+      border-color: rgba(74, 127, 212, 0.4);
+      background: linear-gradient(145deg, rgba(74, 127, 212, 0.12) 0%, rgba(30, 58, 99, 0.15) 100%);
+    }
+
+    .plan-card.featured.selected { box-shadow: 0 10px 32px rgba(74, 127, 212, 0.25); }
+
+    .featured-badge {
+      background: linear-gradient(135deg, #1E3A63, #264d84);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .plan-icon-wrap {
+      width: 28px;
+      height: 28px;
+      background: rgba(30, 58, 99, 0.3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .plan-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; line-height: 1.2; }
+    .plan-price-main { font-size: 20px; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-bottom: 8px; }
+
+    .plan-select-indicator {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(30,58,99,0.5);
+      border-radius: 50%;
+      margin-top: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .plan-card.selected .plan-select-indicator { background: #1E3A63; border-color: #4a7fd4; }
+
+    /* ─────────────────────────────────────────
+       SECTION TITLES
+    ───────────────────────────────────────── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+    }
+
+    /* ─────────────────────────────────────────
+       EXTRAS
+    ───────────────────────────────────────── */
+    .extra-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(30, 58, 99, 0.25);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .extra-item:hover { border-color: rgba(30, 58, 99, 0.5); background: rgba(30, 58, 99, 0.08); }
+    .extra-item.checked { border-color: rgba(30, 58, 99, 0.6); background: rgba(30, 58, 99, 0.12); }
+
+    .custom-checkbox {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid rgba(30,58,99,0.6);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease; background: transparent;
+    }
+    .custom-checkbox.checked { background: #1E3A63; border-color: #4a7fd4; }
+
+    .extra-name { flex: 1; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); line-height: 1.3; }
+    .extra-price { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.7); white-space: nowrap; }
+    .extra-price.active { color: #FFFFFF; }
+
+    /* ─────────────────────────────────────────
+       QTY CONTROLS
+    ───────────────────────────────────────── */
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid rgba(30,58,99,0.7);
+      background: rgba(30,58,99,0.2);
+      color: rgba(255,255,255,0.8);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; transition: all 0.2s ease; line-height: 1;
+    }
+    .qty-btn:hover { background: rgba(30,58,99,0.5); border-color: #4a7fd4; }
+    .qty-value { font-size: 15px; font-weight: 700; color: #FFFFFF; min-width: 20px; text-align: center; }
+
+    /* ─────────────────────────────────────────
+       STICKY FOOTER
+    ───────────────────────────────────────── */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(160deg, #0d1e38 0%, #091528 100%);
+      border-top: 1px solid rgba(30, 58, 99, 0.5);
+      border-radius: 20px 20px 0 0;
+      padding: 14px 16px 18px;
+      box-shadow: 0 -8px 32px rgba(6, 12, 23, 0.8);
+      z-index: 30;
+    }
+
+    .footer-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-details-box {
+      background: rgba(30, 58, 99, 0.1);
+      border: 1px solid rgba(30, 58, 99, 0.2);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.4;
+      max-width: 180px;
+    }
+
+    .footer-detail-label {
+      font-weight: 700; color: rgba(255,255,255,0.85);
+      text-transform: uppercase; letter-spacing: 0.4px;
+      font-size: 7px; margin-bottom: 3px; display: block;
+    }
+
+    .footer-detail-value { font-size: 8px; color: rgba(255,255,255,0.65); line-height: 1.3; word-break: break-word; }
+
+    .total-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
+    .total-amount { font-size: 32px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 12px; }
+
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-copy {
+      background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
+      color: #FFFFFF; border: none; border-radius: 12px;
+      padding: 14px 12px;
+      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: all 0.25s ease; letter-spacing: 0.3px;
+    }
+    .btn-copy:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 4px 16px rgba(30, 58, 99, 0.5); }
+
+    .btn-print {
+      background: rgba(255,255,255,0.93); color: #0d1e38; border: none; border-radius: 12px;
+      padding: 14px 12px;
+      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: all 0.25s ease; letter-spacing: 0.3px;
+    }
+    .btn-print:hover { background: #FFFFFF; box-shadow: 0 4px 16px rgba(255,255,255,0.15); }
+
+    /* ─────────────────────────────────────────
+       TOAST
+    ───────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 110px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1E3A63; color: #fff;
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      opacity: 0; transition: all 0.3s ease;
+      pointer-events: none; white-space: nowrap;
+      z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ─────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────── */
+    .sidebar-toggle {
+      position: fixed; top: 16px; left: 16px;
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 60; box-shadow: 0 4px 16px rgba(30, 58, 99, 0.5);
+      transition: all 0.3s ease;
+    }
+    .sidebar-toggle:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 6px 20px rgba(30, 58, 99, 0.6); }
+
+    .sidebar-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease; z-index: 40;
+    }
+    .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .sidebar-container {
+      position: fixed; top: 0; bottom: 0;
+      left: -85%; width: 80%;
+      max-width: 300px;
+      background: linear-gradient(160deg, #0d1e38 0%, #091528 100%);
+      border-right: 1px solid rgba(30, 58, 99, 0.5);
+      border-radius: 0 20px 20px 0;
+      overflow-y: auto; z-index: 50;
+      display: flex; flex-direction: column;
+      transition: left 0.3s ease;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    }
+    .sidebar-container.open { left: 0; }
+
+    .sidebar-content { padding: 24px 16px; flex: 1; }
+    .sidebar-section { margin-bottom: 24px; }
+    .sidebar-title { font-size: 11px; font-weight: 700; color: rgba(30,58,99,0.8); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+
+    .contact-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .contact-btn {
+      background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
+      color: #FFFFFF; border: 1px solid rgba(74, 127, 212, 0.3);
+      border-radius: 10px; padding: 11px 12px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.25s ease; text-decoration: none;
+    }
+    .contact-btn:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 4px 12px rgba(30, 58, 99, 0.4); border-color: rgba(74, 127, 212, 0.6); }
+
+    .info-box {
+      background: rgba(74, 127, 212, 0.1);
+      border: 1px solid rgba(74, 127, 212, 0.3);
+      border-radius: 10px; padding: 12px;
+      font-size: 10px; color: rgba(255,255,255,0.8); line-height: 1.5; text-align: center;
+    }
+    .info-box strong { display: block; color: rgba(255,255,255,0.95); margin-bottom: 4px; }
+
+    /* ─────────────────────────────────────────
+       PLAN MODAL
+    ───────────────────────────────────────── */
+    .plan-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.7); z-index: 100;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .plan-modal {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 101; max-width: 500px; width: 90%; max-height: 85vh;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translate(-50%, -45%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+
+    .plan-modal-content {
+      background: linear-gradient(160deg, #0d1e38 0%, #091528 100%);
+      border: 1px solid rgba(30, 58, 99, 0.5);
+      border-radius: 16px; padding: 20px;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+    .plan-modal-content::-webkit-scrollbar { width: 4px; }
+    .plan-modal-content::-webkit-scrollbar-thumb { background: #1E3A63; border-radius: 2px; }
+
+    .modal-plan-item { margin-bottom: 12px; padding: 12px; background: rgba(30, 58, 99, 0.15); border: 1px solid rgba(30, 58, 99, 0.3); border-radius: 10px; }
+    .modal-plan-label { font-size: 11px; font-weight: 700; color: rgba(74, 127, 212, 0.8); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .modal-plan-text { font-size: 12px; color: rgba(255, 255, 255, 0.8); line-height: 1.5; }
+    .modal-plan-list { font-size: 12px; color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin: 0; padding-left: 16px; }
+    .modal-plan-list li { margin-bottom: 6px; }
+
+    /* ─────────────────────────────────────────
+       TIP CARDS
+    ───────────────────────────────────────── */
+    .tip-card {
+      background: rgba(30, 58, 99, 0.1);
+      border: 1px solid rgba(30, 58, 99, 0.25);
+      border-radius: 12px; padding: 14px;
+      transition: background 0.2s ease;
+    }
+    .tip-card:hover { background: rgba(30, 58, 99, 0.15); }
+
+    /* ─────────────────────────────────────────
+       DURATIONS in sidebar
+    ───────────────────────────────────────── */
+    .plan-duration-card {
+      background: rgba(74,127,212,0.1);
+      border: 1px solid rgba(74,127,212,0.3);
+      border-radius: 10px; padding: 12px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .plan-duration-card:hover { background: rgba(74,127,212,0.18); }
+
+    /* ─────────────────────────────────────────
+       SCROLLBAR GLOBAL
+    ───────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #060C17; }
+    ::-webkit-scrollbar-thumb { background: #1E3A63; border-radius: 2px; }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — MOBILE (<480px)
+    ───────────────────────────────────────── */
+    @media (max-width: 479px) {
+      .page-center { padding: 0 12px; }
+
+      .logo-container { padding: 12px 14px; gap: 8px; }
+      .logo-container svg { width: 32px !important; height: 32px !important; }
+      #brand-name-el { font-size: 15px !important; }
+
+      #app-title-el { font-size: 18px !important; line-height: 1.25; }
+
+      .plan-card { min-width: 148px; padding: 10px 10px; }
+      .plan-title { font-size: 12px; }
+      .plan-price-main { font-size: 15px; }
+      .plan-icon-wrap { width: 22px; height: 22px; margin-bottom: 4px; }
+      .featured-badge { font-size: 7px; padding: 2px 7px; }
+
+      .extra-item { padding: 10px 10px; }
+      .extra-name { font-size: 12px; }
+      .extra-price { font-size: 12px; }
+
+      .section-title { font-size: 9px; }
+
+      .total-amount { font-size: 26px; }
+
+      .btn-copy, .btn-print { font-size: 11px; padding: 11px 8px; gap: 5px; }
+
+      .footer-details-box { max-width: 130px; }
+
+      .toggle-btn { font-size: 11px; padding: 8px 0; }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — TABLET (480–767px)
+    ───────────────────────────────────────── */
+    @media (min-width: 480px) and (max-width: 767px) {
+      .plan-card { min-width: 165px; }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — DESKTOP (768px+)
+    ───────────────────────────────────────── */
+    @media (min-width: 768px) {
+      .page-center { padding: 0 24px; }
+
+      .logo-container { padding: 20px 28px; }
+      #brand-name-el { font-size: 20px !important; }
+      #app-title-el { font-size: 26px !important; }
+
+      .plan-card { min-width: 185px; }
+      .plan-title { font-size: 16px; }
+      .plan-price-main { font-size: 22px; }
+
+      .extra-name { font-size: 15px; }
+      .extra-price { font-size: 15px; }
+
+      .section-title { font-size: 12px; }
+
+      .total-amount { font-size: 38px; }
+      .total-label { font-size: 13px; }
+
+      .btn-copy, .btn-print { font-size: 15px; padding: 16px 14px; }
+
+      .footer-details-box { max-width: 220px; font-size: 10px; padding: 10px 14px; }
+      .footer-detail-label { font-size: 8px; }
+      .footer-detail-value { font-size: 9px; }
+
+      .sticky-footer { padding: 18px 24px 22px; }
+
+      /* Sidebar en desktop queda fijo a la izquierda */
+      .sidebar-overlay { display: none !important; }
+      .sidebar-container {
+        width: 260px; left: -270px; border-radius: 0 16px 16px 0;
+      }
+      .sidebar-container.open { left: 0; }
+    }
+
+    @media (min-width: 1024px) {
+      .page-center { max-width: 680px; }
+    }
+
+    @media (min-width: 1280px) {
+      .page-center { max-width: 720px; }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <!-- SIDEBAR TOGGLE BUTTON -->
+  <button class="sidebar-toggle" id="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Abrir menú">
+    <i data-lucide="menu" style="width:22px;height:22px;color:#fff;"></i>
+  </button>
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-container" id="sidebar">
+    <div class="sidebar-content">
+      <div style="height:50px;"></div><!-- space for toggle btn -->
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">⏱️ Duraciones Estimadas</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="plan-duration-card" onclick="openPlanModal('express')">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <i data-lucide="zap" style="width:14px;height:14px;color:#4a7fd4;"></i>
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);">Plan Express</div>
+            </div>
+            <div style="font-size:13px;font-weight:800;color:#4a7fd4;">2-3 horas</div>
+          </div>
+          <div class="plan-duration-card" onclick="openPlanModal('detallado')">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <i data-lucide="sparkles" style="width:14px;height:14px;color:#6aa3f5;"></i>
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);">Plan Detallado</div>
+            </div>
+            <div style="font-size:13px;font-weight:800;color:#6aa3f5;">3-4 horas</div>
+          </div>
+          <div style="background:rgba(212,165,116,0.1);border:1px solid rgba(212,165,116,0.3);border-radius:10px;padding:12px;cursor:pointer;transition:all 0.2s ease;" onclick="openPlanModal('premium')">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <i data-lucide="crown" style="width:14px;height:14px;color:#d4a574;"></i>
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);">Plan Premium+</div>
+            </div>
+            <div style="font-size:13px;font-weight:800;color:#d4a574;">5-6 horas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">📞 Ponte en Contacto</div>
+        <div class="contact-buttons">
+          <a href="https://wa.me/595986150575" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:linear-gradient(135deg,#25D366 0%,#20BA5A 100%);border:1px solid rgba(45,220,90,0.3);">
+            <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp
+          </a>
+          <a href="https://instagram.com/attx_detailing" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:linear-gradient(135deg,#E1306C 0%,#C13584 100%);border:1px solid rgba(225,48,108,0.3);">
+            <i data-lucide="instagram" style="width:14px;height:14px;"></i> Instagram
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="info-box">
+          <strong>💡 Consejo</strong>
+          <div style="margin-top:6px;">Selecciona extras para personalizar tu presupuesto según tus necesidades específicas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="app-wrapper">
+
+    <!-- TOP CONTENT -->
+    <div style="position:relative;z-index:1;padding-top:16px;padding-bottom:4px;">
+      <div class="page-center">
+
+        <!-- Logo -->
+        <div class="logo-container" id="logo-container">
+          <svg width="40" height="40" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="none" stroke="#4a7fd4" stroke-width="1.5"/>
+            <polygon points="22,8 36,16 36,30 22,38 8,30 8,16" fill="rgba(30,58,99,0.4)" stroke="#1E3A63" stroke-width="1"/>
+            <text x="22" y="27" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="11" fill="#FFFFFF" letter-spacing="0.5">ATTX</text>
+          </svg>
+          <div>
+            <div style="font-size:18px;font-weight:900;color:#FFFFFF;letter-spacing:1px;" id="brand-name-el">ATTX Detailing</div>
+            <div style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;">Enfocados a demostrar calidad 💎</div>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div style="margin-top:20px;margin-bottom:20px;">
+          <div style="font-size:9px;font-weight:700;color:rgba(30,58,99,0.8);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Herramienta</div>
+          <h1 id="app-title-el" style="font-size:22px;font-weight:900;color:#FFFFFF;margin:0;line-height:1.2;letter-spacing:-0.3px;">Cotizador de Servicios<br>de Detailing</h1>
+        </div>
+
+        <!-- Vehicle Toggle -->
+        <div style="margin-bottom:24px;">
+          <div class="section-title" style="margin-bottom:10px;">Tipo de Vehículo</div>
+          <div class="vehicle-toggle">
+            <button class="toggle-btn active" id="btn-auto" onclick="selectVehicle('auto')">
+              <i data-lucide="car" style="width:14px;height:14px;"></i> Auto
+            </button>
+            <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">
+              <i data-lucide="truck" style="width:14px;height:14px;"></i> Camioneta / SUV
+            </button>
+          </div>
+        </div>
+
+        <!-- Plans section title -->
+        <div class="section-title">Selecciona tu Plan Base</div>
+      </div>
+
+      <!-- Plans scroll — full width intentional for swipe UX -->
+      <div style="padding:0 16px;">
+        <div class="plans-scroll" style="max-width:calc(600px + 16px);margin:0 auto;">
+
+          <!-- Plan Express -->
+          <div class="plan-card" id="plan-express" onclick="selectPlan('express')" style="border-color:#7a8a9a;">
+            <div class="plan-icon-wrap">
+              <i data-lucide="zap" style="width:16px;height:16px;color:#7a8a9a;"></i>
+            </div>
+            <div class="plan-title" id="plan1-title-el">Plan Express</div>
+            <div style="font-size:9px;color:rgba(74,127,212,0.8);font-weight:600;margin-bottom:8px;">⏱️ 2-3h</div>
+            <div class="plan-price-main" id="plan1-price-main">90.000 Gs</div>
+            <div class="plan-select-indicator" id="ind-express">
+              <i data-lucide="check" style="width:10px;height:10px;color:white;display:none;" id="check-express"></i>
+            </div>
+          </div>
+
+          <!-- Plan Detallado -->
+          <div class="plan-card featured selected" id="plan-detallado" onclick="selectPlan('detallado')">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div class="plan-icon-wrap" style="background:rgba(74,127,212,0.15);margin-bottom:0;">
+                <i data-lucide="sparkles" style="width:16px;height:16px;color:#6aa3f5;"></i>
+              </div>
+              <div class="featured-badge">⭐ Recomendado</div>
+            </div>
+            <div class="plan-title" id="plan2-title-el">Plan Detallado</div>
+            <div style="font-size:9px;color:rgba(74,127,212,0.8);font-weight:600;margin-bottom:8px;">⏱️ 3-4h</div>
+            <div class="plan-price-main" id="plan2-price-main">200.000 Gs</div>
+            <div class="plan-select-indicator" id="ind-detallado" style="border-color:#4a7fd4;background:#1E3A63;">
+              <i data-lucide="check" style="width:10px;height:10px;color:white;" id="check-detallado"></i>
+            </div>
+          </div>
+
+          <!-- Plan Premium -->
+          <div class="plan-card featured" id="plan-premium" onclick="selectPlan('premium')" style="border-color:#d4a574;background:linear-gradient(145deg,rgba(212,165,116,0.12) 0%,rgba(13,30,56,0.15) 100%);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <div class="plan-icon-wrap" style="background:rgba(212,165,116,0.15);margin-bottom:0;">
+                <i data-lucide="crown" style="width:16px;height:16px;color:#d4a574;"></i>
+              </div>
+              <div class="featured-badge" style="background:linear-gradient(135deg,#d4a574,#c99456);">👑 Plan Full</div>
+            </div>
+            <div class="plan-title" id="plan3-title-el">Plan Premium+</div>
+            <div style="font-size:9px;color:rgba(74,127,212,0.8);font-weight:600;margin-bottom:8px;">⏱️ 5-6h</div>
+            <div class="plan-price-main" id="plan3-price-main">380.000 Gs</div>
+            <div class="plan-select-indicator" id="ind-premium">
+              <i data-lucide="check" style="width:10px;height:10px;color:white;display:none;" id="check-premium"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Plan details -->
+      <div id="plan-details-container" style="display:none;padding:12px 0 4px;">
+        <div class="page-center">
+          <div style="background:rgba(30,58,99,0.15);border:1px solid rgba(74,127,212,0.3);border-radius:12px;padding:12px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <div id="plan-detail-icon" style="font-size:16px;">✨</div>
+              <div>
+                <div id="plan-detail-name" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.95);">Plan Detallado</div>
+                <div id="plan-detail-time" style="font-size:9px;color:rgba(74,127,212,0.8);font-weight:600;">⏱️ 3-4h</div>
+              </div>
+            </div>
+            <div id="plan-details-content" style="display:flex;flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXTRAS -->
+    <div style="position:relative;z-index:1;padding-bottom:190px;">
+      <div class="page-center">
+
+        <div class="section-title" id="extras-title-el">Personaliza tu servicio (Extras)</div>
+
+        <!-- Exterior -->
+        <div style="margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:600;color:rgba(74,127,212,0.8);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="sparkles" style="width:14px;height:14px;"></i> Protección Exterior
+          </div>
+
+          <div class="extra-item" id="extra-1" onclick="toggleExtra(1)">
+            <div class="custom-checkbox" id="cb-1">
+              <i data-lucide="check" style="width:11px;height:11px;color:white;display:none;" id="cbicon-1"></i>
+            </div>
+            <div style="flex:1;">
+              <div class="extra-name">Remoción de lluvia ácida en retrovisores</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Eliminación de corrosión y manchas</div>
+            </div>
+            <div class="extra-price" id="price-1">50.000 Gs</div>
+          </div>
+
+          <div class="extra-item" id="extra-4" onclick="toggleExtra(4)">
+            <div class="custom-checkbox" id="cb-4">
+              <i data-lucide="check" style="width:11px;height:11px;color:white;display:none;" id="cbicon-4"></i>
+            </div>
+            <div style="flex:1;">
+              <div class="extra-name">Remoción de lluvia ácida en ventanillas</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Eliminación de contaminación e impurezas adheridas</div>
+              <div style="display:none;margin-top:10px;" id="qty-controls">
+                <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(30,58,99,0.15);padding:8px 10px;border-radius:8px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <button class="qty-btn" onclick="changeQty(event,-1)" aria-label="Disminuir">−</button>
+                    <span class="qty-value" id="qty-value">1</span>
+                    <button class="qty-btn" onclick="changeQty(event,1)" aria-label="Aumentar">+</button>
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);">30.000 Gs c/u</div>
+                </div>
+              </div>
+            </div>
+            <div class="extra-price" id="price-4">30.000 Gs</div>
+          </div>
+        </div>
+
+        <!-- Interior -->
+        <div style="margin-bottom:20px;">
+          <div style="font-size:11px;font-weight:600;color:rgba(74,127,212,0.8);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="droplets" style="width:14px;height:14px;"></i> Interior Premium &amp; Acabados
+          </div>
+
+          <div class="extra-item" id="extra-3" onclick="toggleExtra(3)">
+            <div class="custom-checkbox" id="cb-3">
+              <i data-lucide="check" style="width:11px;height:11px;color:white;display:none;" id="cbicon-3"></i>
+            </div>
+            <div style="flex:1;">
+              <div class="extra-name">Revitalización de asientos</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Limpieza básica de asientos (sin desmonte)</div>
+            </div>
+            <div class="extra-price" id="price-3">100.000 Gs</div>
+          </div>
+
+          <div class="extra-item" id="extra-2" onclick="toggleExtra(2)">
+            <div class="custom-checkbox" id="cb-2">
+              <i data-lucide="check" style="width:11px;height:11px;color:white;display:none;" id="cbicon-2"></i>
+            </div>
+            <div style="flex:1;">
+              <div class="extra-name">Limpieza de techo</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">Limpieza de contacto y sanitización completa del techo interior</div>
+            </div>
+            <div class="extra-price" id="price-2">100.000 Gs</div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(30,58,99,0.3);">
+          <div class="section-title">💡 Consejos para Mantener tu Vehículo</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+            <div class="tip-card">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="font-size:20px;flex-shrink:0;">☀️</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">Evita el sol directo</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.6);line-height:1.4;">Estaciona en sombra o garaje para preservar los recubrimientos protectores</div>
+                </div>
+              </div>
+            </div>
+            <div class="tip-card">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="font-size:20px;flex-shrink:0;">💧</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">Lavado regular</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.6);line-height:1.4;">Lava tu vehículo cada 2 semanas para mantener la protección y brillo</div>
+                </div>
+              </div>
+            </div>
+            <div class="tip-card">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="font-size:20px;flex-shrink:0;">🧴</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">Productos recomendados</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.6);line-height:1.4;">Usa solo champús pH neutro y productos compatibles con tu recubrimiento</div>
+                </div>
+              </div>
+            </div>
+            <div class="tip-card">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="font-size:20px;flex-shrink:0;">✨</div>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;">Mantenimiento</div>
+                  <div style="font-size:10px;color:rgba(255,255,255,0.6);line-height:1.4;">Realiza un detallado cada 3 meses para máxima duración de protecciones</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /extras -->
+
+  </div><!-- /app-wrapper -->
+
+  <!-- STICKY FOOTER -->
+  <div class="sticky-footer">
+    <div class="footer-inner">
+      <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between;">
+        <div style="flex:1;min-width:0;">
+          <div class="total-label">Total Estimado</div>
+          <div class="total-amount" id="total-display">200.000 Gs</div>
+        </div>
+        <div class="footer-details-box">
+          <span class="footer-detail-label">Incluye</span>
+          <div class="footer-detail-value" id="detail-services">Plan Detallado</div>
+        </div>
+      </div>
+      <div class="action-buttons" style="margin-top:10px;">
+        <button class="btn-copy" id="copy-btn-el" onclick="copyBudget()">
+          <i data-lucide="clipboard-copy" style="width:15px;height:15px;"></i>
+          <span id="copy-btn-text">Copiar Presupuesto</span>
+        </button>
+        <button class="btn-print" id="print-btn-el" onclick="printBudget()">
+          <i data-lucide="printer" style="width:15px;height:15px;color:#0d1e38;"></i>
+          <span id="print-btn-text">Imprimir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast-msg"></div>
+
+  <!-- PLAN MODAL -->
+  <div id="plan-modal-overlay" class="plan-modal-overlay" onclick="closePlanModal()" style="display:none;"></div>
+  <div id="plan-modal" class="plan-modal" style="display:none;">
+    <div class="plan-modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(30,58,99,0.3);">
+        <h2 id="modal-plan-title" style="font-size:18px;font-weight:900;color:#FFFFFF;margin:0;"></h2>
+        <button onclick="closePlanModal()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.6);padding:4px;">
+          <i data-lucide="x" style="width:20px;height:20px;"></i>
+        </button>
+      </div>
+      <div id="modal-plan-content"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ─────────────────────────────────────────
+       STATE & DATA
+    ───────────────────────────────────────── */
+    const state = { vehicle: 'auto', plan: 'detallado', extras: { 1: false, 2: false, 3: false, 4: false }, qty: 1 };
+
+    const PLANS = {
+      express:   { auto: 90000,  camioneta: 130000, name: 'Plan Express / Mant.' },
+      detallado: { auto: 200000, camioneta: 250000, name: 'Plan Detallado' },
+      premium:   { auto: 380000, camioneta: 460000, name: 'Plan Premium+' }
+    };
+
+    const PLAN_BENEFITS = {
+      express: {
+        time: '2-3 horas',
+        benefits: [
+          { label: 'Exterior', items: ['Pre-Lavado desincrustante', 'Lavado de contacto con shampoo neutro', 'Limpieza de cubiertas y llantas', 'Revitalizador de cubiertas (Abrillantador)'] },
+          { label: 'Interior', items: ['Aspirado y limpieza (Nivel 1)'] }
+        ]
+      },
+      detallado: {
+        time: '3-4 horas',
+        benefits: [
+          { label: 'Exterior', items: ['Pre-Lavado desincrustante', 'Lavado de contacto con shampoo neutro', 'Limpieza de cubiertas y llantas', 'Revitalizador de cubiertas (Abrillantador)', 'Detallado en caja de ruedas', 'Recubrimiento hidrorreactivo en chapería y parabrisas frontal', 'Revitalización de plásticos externos'] },
+          { label: 'Interior', items: ['Revitalización de plásticos internos', 'Aspirado y limpieza (Nivel 2)'] }
+        ]
+      },
+      premium: {
+        time: '5-6 horas',
+        benefits: [
+          { label: 'Exterior', items: ['Pre-Lavado desincrustante', 'Lavado de contacto con shampoo neutro', 'Limpieza de cubiertas y llantas', 'Revitalizador de cubiertas (Abrillantador)', 'Detallado en caja de ruedas', 'Recubrimiento hidrorreactivo en chapería y parabrisas frontal', 'Revitalización de plásticos externos', 'Remoción de contaminación por lluvia ácida en parabrisas frontal', 'Remoción de capa asfáltica', 'Recubrimiento a base de silicio (protección 12 meses)'] },
+          { label: 'Interior', items: ['Revitalización de plásticos internos', 'Aspirado y limpieza profunda (Nivel 3)'] }
+        ]
+      }
+    };
+
+    const EXTRAS = { 1: 50000, 2: 100000, 3: 100000 };
+    const VENTANILLA_PRICE = 30000;
+
+    /* ─────────────────────────────────────────
+       HELPERS
+    ───────────────────────────────────────── */
+    function formatGsFull(n) { return n.toLocaleString('es-PY') + ' Gs'; }
+
+    function getPlanColors(planId) {
+      if (planId === 'premium') return { bg: 'rgba(212,165,116,0.15)', border: '#d4a574', label: '#d4a574' };
+      if (planId === 'detallado') return { bg: 'rgba(74,127,212,0.15)', border: 'rgba(74,127,212,0.3)', label: 'rgba(74,127,212,0.95)' };
+      return { bg: 'rgba(122,138,154,0.15)', border: 'rgba(122,138,154,0.3)', label: 'rgba(122,138,154,0.95)' };
+    }
+
+    function getLastDayOfMonth() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth() + 1, 0)
+        .toLocaleDateString('es-PY', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    /* ─────────────────────────────────────────
+       VEHICLE
+    ───────────────────────────────────────── */
+    function selectVehicle(v) {
+      state.vehicle = v;
+      document.getElementById('btn-auto').className = 'toggle-btn ' + (v === 'auto' ? 'active' : 'inactive');
+      document.getElementById('btn-camioneta').className = 'toggle-btn ' + (v === 'camioneta' ? 'active' : 'inactive');
+      updatePlanPrices();
+      updateTotal();
+      updateSummary();
+    }
+
+    /* ─────────────────────────────────────────
+       PLAN SELECTION
+    ───────────────────────────────────────── */
+    function selectPlan(p) {
+      state.plan = p;
+      ['express','detallado','premium'].forEach(id => {
+        const card = document.getElementById('plan-' + id);
+        const ind  = document.getElementById('ind-' + id);
+        const chk  = document.getElementById('check-' + id);
+        if (id === p) {
+          card.classList.add('selected');
+          ind.style.background = '#1E3A63';
+          ind.style.borderColor = '#4a7fd4';
+          chk.style.display = 'block';
+        } else {
+          card.classList.remove('selected');
+          ind.style.background = 'transparent';
+          ind.style.borderColor = 'rgba(30,58,99,0.5)';
+          chk.style.display = 'none';
+        }
+      });
+
+      if (p === 'express') [1,2,3,4].forEach(n => { if (state.extras[n]) toggleExtra(n); });
+
+      updateExtrasAvailability();
+      updatePlanDetails(p);
+      document.getElementById('plan-details-container').style.display = 'block';
+      updateTotal();
+      updateSummary();
+    }
+
+    function updateExtrasAvailability() {
+      const isExpress = state.plan === 'express';
+      [1,2,3,4].forEach(n => {
+        const item = document.getElementById('extra-' + n);
+        if (item) {
+          item.style.opacity = isExpress ? '0.5' : '1';
+          item.style.pointerEvents = isExpress ? 'none' : 'auto';
+          item.style.cursor = isExpress ? 'not-allowed' : 'pointer';
+        }
+      });
+
+      let msgEl = document.getElementById('express-message');
+      if (isExpress) {
+        if (!msgEl) {
+          msgEl = document.createElement('div');
+          msgEl.id = 'express-message';
+          msgEl.style.cssText = 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:rgba(255,255,255,0.7);font-weight:600;display:flex;align-items:center;gap:8px;';
+          msgEl.innerHTML = '<span style="font-size:16px;flex-shrink:0;">⚠️</span><span>Este plan no permite agregar servicios adicionales</span>';
+          const extrasTitle = document.getElementById('extras-title-el');
+          extrasTitle.insertAdjacentElement('afterend', msgEl);
+        }
+        msgEl.style.display = 'flex';
+      } else if (msgEl) {
+        msgEl.style.display = 'none';
+      }
+    }
+
+    function updatePlanDetails(planId) {
+      const planData = PLAN_BENEFITS[planId];
+      const icons = { express: '⚡', detallado: '✨', premium: '👑' };
+      const c = getPlanColors(planId);
+
+      document.getElementById('plan-detail-icon').textContent = icons[planId];
+      document.getElementById('plan-detail-name').textContent = PLANS[planId].name;
+      document.getElementById('plan-detail-time').textContent = `⏱️ ${planData.time}`;
+
+      document.getElementById('plan-details-content').innerHTML = planData.benefits.map(s => `
+        <div style="background:${c.bg};border:1px solid ${c.border};border-radius:10px;padding:8px;border-left:3px solid ${c.label};">
+          <div style="font-size:9px;font-weight:700;color:${c.label};text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px;display:flex;align-items:center;gap:4px;">
+            <i data-lucide="${s.label==='Exterior'?'palette':'package'}" style="width:12px;height:12px;"></i>
+            ${s.label}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            ${s.items.map(i=>`
+              <div style="font-size:10px;color:rgba(255,255,255,0.8);display:flex;align-items:flex-start;gap:6px;line-height:1.3;">
+                <span style="color:${c.label};font-weight:700;flex-shrink:0;margin-top:1px;font-size:8px;">•</span>
+                <span>${i}</span>
+              </div>`).join('')}
+          </div>
+        </div>`).join('');
+
+      setTimeout(() => lucide.createIcons(), 50);
+    }
+
+    function updatePlanPrices() {
+      ['express','detallado','premium'].forEach((planId, i) => {
+        const el = document.getElementById('plan' + (i+1) + '-price-main');
+        if (el) el.textContent = formatGsFull(PLANS[planId][state.vehicle]);
+      });
+    }
+
+    /* ─────────────────────────────────────────
+       EXTRAS
+    ───────────────────────────────────────── */
+    function toggleExtra(n) {
+      state.extras[n] = !state.extras[n];
+      const checked = state.extras[n];
+      document.getElementById('extra-' + n).classList.toggle('checked', checked);
+      const cb = document.getElementById('cb-' + n);
+      cb.classList.toggle('checked', checked);
+      document.getElementById('cbicon-' + n).style.display = checked ? 'block' : 'none';
+      const price = document.getElementById('price-' + n);
+      if (price) price.classList.toggle('active', checked);
+
+      if (n === 4) {
+        const qtyControls = document.getElementById('qty-controls');
+        if (qtyControls) qtyControls.style.display = checked ? 'block' : 'none';
+        if (price) price.textContent = formatGsFull(checked ? state.qty * VENTANILLA_PRICE : VENTANILLA_PRICE);
+      }
+
+      updateTotal();
+      updateSummary();
+    }
+
+    function changeQty(event, delta) {
+      event.stopPropagation();
+      state.qty = Math.max(1, Math.min(20, state.qty + delta));
+      document.getElementById('qty-value').textContent = state.qty;
+      if (state.extras[4]) {
+        document.getElementById('price-4').textContent = formatGsFull(state.qty * VENTANILLA_PRICE);
+      }
+      updateTotal();
+      updateSummary();
+    }
+
+    /* ─────────────────────────────────────────
+       TOTALS & SUMMARY
+    ───────────────────────────────────────── */
+    function updateTotal() {
+      const planCost   = PLANS[state.plan][state.vehicle];
+      const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
+      const qtyCost    = state.extras[4] ? state.qty * VENTANILLA_PRICE : 0;
+      document.getElementById('total-display').textContent = formatGsFull(planCost + extrasCost + qtyCost);
+    }
+
+    function updateSummary() {
+      const extraNames = { 1: 'Lluvia ácida retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización asientos' };
+      const activeExtras = [1,2,3].filter(n => state.extras[n]).map(n => extraNames[n]);
+      if (state.extras[4]) activeExtras.push(`Ventanillas x${state.qty}`);
+      const summary = PLANS[state.plan].name + (activeExtras.length ? ' + ' + activeExtras.join(', ') : '');
+      document.getElementById('detail-services').textContent = summary;
+    }
+
+    /* ─────────────────────────────────────────
+       COPY & PRINT
+    ───────────────────────────────────────── */
+    function copyBudget() {
+      const v    = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+      const plan = PLANS[state.plan].name;
+      const pCost = PLANS[state.plan][state.vehicle];
+      const lines = [`=== ATTX Detailing — Presupuesto ===\n`, `Vehículo: ${v}`, `Plan: ${plan} — ${formatGsFull(pCost)}`, `\n--- Extras ---`];
+      const extraNames = { 1: 'Lluvia ácida de retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización de asientos' };
+      [1,2,3].forEach(n => { if (state.extras[n]) lines.push(`• ${extraNames[n]}: ${formatGsFull(EXTRAS[n])}`); });
+      if (state.extras[4]) lines.push(`• Lluvia ácida en ventanillas x${state.qty}: ${formatGsFull(state.qty * VENTANILLA_PRICE)}`);
+      const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
+      const total = pCost + extrasCost + (state.extras[4] ? state.qty * VENTANILLA_PRICE : 0);
+      lines.push(`\nTOTAL ESTIMADO: ${formatGsFull(total)}`);
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('¡Presupuesto copiado! 📋')).catch(() => showToast('No se pudo copiar'));
+      } else showToast('¡Presupuesto listo! 📋');
+    }
+
+    function printBudget() {
+      const v = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+      const plan = PLANS[state.plan].name;
+      const pCost = PLANS[state.plan][state.vehicle];
+      const planData = PLAN_BENEFITS[state.plan];
+      const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
+      const total = pCost + extrasCost + (state.extras[4] ? state.qty * VENTANILLA_PRICE : 0);
+      const extraNames = { 1: 'Remoción de lluvia ácida en retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización de asientos', 4: 'Remoción de lluvia ácida en ventanillas' };
+
+      let extrasHTML = '';
+      let hasExtras = false;
+      [1,2,3,4].forEach(n => {
+        if (state.extras[n]) {
+          if (!hasExtras) { extrasHTML += '<div style="margin-bottom:24px;"><div style="font-size:11px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Extras Adicionales</div><div style="background:rgba(30,58,99,0.04);border-left:4px solid #1E3A63;padding:14px;border-radius:8px;">'; hasExtras = true; }
+          const price = n === 4 ? state.qty * VENTANILLA_PRICE : EXTRAS[n];
+          const label = n === 4 ? `${extraNames[n]} x${state.qty}` : extraNames[n];
+          extrasHTML += `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:#0d1e38;"><span style="font-weight:600;">${label}</span><span style="font-weight:700;color:#1E3A63;margin-left:16px;">${formatGsFull(price)}</span></div>`;
+        }
+      });
+      if (hasExtras) extrasHTML += '</div></div>';
+
+      const benefitsHTML = planData.benefits.map(s => `
+        <div style="margin-bottom:10px;">
+          <div style="font-weight:700;color:#1E3A63;margin-bottom:4px;font-size:11px;">${s.label}</div>
+          ${s.items.map(i => `<div style="margin-left:12px;color:rgba(13,30,56,0.8);font-size:12px;line-height:1.6;">• ${i}</div>`).join('')}
+        </div>`).join('');
+
+      const content = `<html><head><title>Presupuesto ATTX</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:40px 20px;}.container{max-width:580px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:36px 30px;text-align:center;color:#fff;}.logo{font-size:28px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:32px 28px;}.section{margin-bottom:24px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:16px;}.planname{font-size:14px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:22px;font-weight:900;color:#1E3A63;margin-bottom:12px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:22px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;}.gtotal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:12px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:26px;font-weight:900;}.footer{text-align:center;padding:18px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:11px;color:rgba(13,30,56,0.6);}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:14px;font-weight:700;color:#0d1e38;">${v}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:20px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${extrasCost>0?`<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost)}</span></div>`:''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
+
+      const pw = window.open('', '', 'height=800,width=900');
+      pw.document.write(content);
+      pw.document.close();
+      setTimeout(() => { pw.print(); showToast('¡Presupuesto impreso! 🖨️'); }, 250);
+    }
+
+    /* ─────────────────────────────────────────
+       TOAST
+    ───────────────────────────────────────── */
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast-msg');
+      t.textContent = msg;
+      t.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    /* ─────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────── */
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('open');
+    }
+
+    /* ─────────────────────────────────────────
+       PLAN MODAL
+    ───────────────────────────────────────── */
+    function openPlanModal(planId) {
+      const c = getPlanColors(planId);
+      const planData = PLAN_BENEFITS[planId];
+
+      document.getElementById('modal-plan-title').textContent = PLANS[planId].name;
+      document.getElementById('modal-plan-content').innerHTML = `
+        <div class="modal-plan-item" style="background:${c.bg};border:1px solid ${c.border};">
+          <div class="modal-plan-label" style="color:${c.label};">⏱️ Tiempo Estimado</div>
+          <div class="modal-plan-text">${planData.time}</div>
+        </div>
+        <div class="modal-plan-item" style="background:${c.bg};border:1px solid ${c.border};">
+          <div class="modal-plan-label" style="color:${c.label};">💰 Precios</div>
+          <div class="modal-plan-text">Auto: <strong>${formatGsFull(PLANS[planId].auto)}</strong><br>Camioneta: <strong>${formatGsFull(PLANS[planId].camioneta)}</strong></div>
+        </div>
+        ${planData.benefits.map(s => `
+          <div class="modal-plan-item" style="background:${c.bg};border:1px solid ${c.border};border-left:3px solid ${c.label};">
+            <div class="modal-plan-label" style="color:${c.label};">${s.label}</div>
+            <ul class="modal-plan-list">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+          </div>`).join('')}`;
+
+      document.getElementById('plan-modal').style.display = 'block';
+      document.getElementById('plan-modal-overlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePlanModal() {
+      document.getElementById('plan-modal').style.display = 'none';
+      document.getElementById('plan-modal-overlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlanModal(); });
+
+    /* ─────────────────────────────────────────
+       INIT
+    ───────────────────────────────────────── */
+    function init() {
+      updatePlanPrices();
+      selectPlan('detallado');
+      selectVehicle('auto');
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+
+    init();
+
+    /* ─────────────────────────────────────────
+       SDK CONFIG (si está disponible)
+    ───────────────────────────────────────── */
+    try {
+      const defaultConfig = {
+        app_title: 'Cotizador de Servicios de Detailing', brand_name: 'ATTX Detailing',
+        plan1_name: 'Plan Express / Mant.', plan2_name: 'Plan Detallado', plan3_name: 'Plan Premium+',
+        extras_section_title: 'Personaliza tu servicio (Extras)',
+        copy_button_text: 'Copiar Presupuesto', print_button_text: 'Imprimir',
+        background_color: '#060C17', surface_color: '#0d1e38', text_color: '#FFFFFF',
+        accent_color: '#1E3A63', font_family: 'Montserrat', font_size: 16
+      };
+
+      window.elementSdk && window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: (config) => {
+          const set = (id, key, def) => { const el = document.getElementById(id); if (el) el.textContent = config[key] || def; };
+          set('app-title-el', 'app_title', defaultConfig.app_title);
+          set('brand-name-el', 'brand_name', defaultConfig.brand_name);
+          set('plan1-title-el', 'plan1_name', defaultConfig.plan1_name);
+          set('plan2-title-el', 'plan2_name', defaultConfig.plan2_name);
+          set('plan3-title-el', 'plan3_name', defaultConfig.plan3_name);
+          set('extras-title-el', 'extras_section_title', defaultConfig.extras_section_title);
+          set('copy-btn-text', 'copy_button_text', defaultConfig.copy_button_text);
+          set('print-btn-text', 'print_button_text', defaultConfig.print_button_text);
+          PLANS.express.name = config.plan1_name || defaultConfig.plan1_name;
+          PLANS.detallado.name = config.plan2_name || defaultConfig.plan2_name;
+          PLANS.premium.name = config.plan3_name || defaultConfig.plan3_name;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: ['background_color','surface_color','text_color','accent_color'].map(key => ({
+            get: () => config[key] || defaultConfig[key],
+            set: (v) => { config[key] = v; window.elementSdk.setConfig({ [key]: v }); }
+          })),
+          borderables: [],
+          fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+          fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+        }),
+        mapToEditPanelValues: (config) => new Map(Object.entries(defaultConfig).map(([k]) => [k, config[k] || defaultConfig[k]]))
+      });
+    } catch(e) { /* SDK not available */ }
+  </script>
+</body>
+</html>
