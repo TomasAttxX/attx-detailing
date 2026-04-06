@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATTX Detailing — Cotizador</title>
+  <title>ATTX Detailing</title>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -49,7 +49,8 @@
       width: 100%;
       max-width: 600px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding-left: 16px;
+      padding-right: 16px;
     }
 
     /* ─────────────────────────────────────────
@@ -123,6 +124,16 @@
       -webkit-overflow-scrolling: touch;
       user-select: none;
     }
+
+    @media (max-width: 768px) {
+      .plans-scroll {
+        padding-left: 0;
+        margin-left: -16px;
+        margin-right: -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
     .plans-scroll::-webkit-scrollbar { display: none; }
 
     .plan-card {
@@ -167,6 +178,22 @@
     .plan-card.blurred {
       opacity: 0.35;
       transition: opacity 0.5s ease;
+    }
+
+    /* Plan Details Animation */
+    .plan-details-content {
+      animation: detailsFadeIn 0.4s ease forwards;
+    }
+
+    @keyframes detailsFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .featured-badge {
@@ -272,7 +299,7 @@
       background: linear-gradient(160deg, #0d1e38 0%, #091528 100%);
       border-top: 1px solid rgba(30, 58, 99, 0.5);
       border-radius: 20px 20px 0 0;
-      padding: 14px 16px 18px;
+      padding: 10px 12px;
       box-shadow: 0 -8px 32px rgba(6, 12, 23, 0.8);
       z-index: 30;
     }
@@ -280,49 +307,87 @@
     .footer-inner {
       max-width: 600px;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .footer-top {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      justify-content: space-between;
     }
 
     .footer-details-box {
       background: rgba(30, 58, 99, 0.1);
       border: 1px solid rgba(30, 58, 99, 0.2);
       border-radius: 8px;
-      padding: 10.45px 12.54px;
-      font-size: 10.45px;
+      padding: 8px 10px;
+      font-size: 9px;
       color: rgba(255, 255, 255, 0.7);
       line-height: 1.2;
-      flex: 2;
-      min-width: 292.6px;
+      flex: 1;
+      min-width: 0;
+      max-width: none;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (max-width: 479px) {
+      .footer-details-box {
+        padding: 6px 8px;
+        font-size: 8px;
+        min-width: 100px;
+        flex: 1;
+      }
+
+      .footer-detail-label {
+        font-size: 6px !important;
+        margin-bottom: 1px;
+      }
+
+      .footer-detail-value {
+        font-size: 8px !important;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     .footer-detail-label {
       font-weight: 700; color: rgba(255,255,255,0.85);
-      text-transform: uppercase; letter-spacing: 0.5px;
-      font-size: 9px; margin-bottom: 2px; display: block;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      font-size: 8px; margin-bottom: 1px; display: block;
     }
 
-    .footer-detail-value { font-size: 5.15px; color: rgba(255,255,255,0.75); line-height: 1.1; word-break: break-word; }
+    .footer-detail-value { font-size: 8px; color: rgba(255,255,255,0.75); line-height: 1.2; word-break: break-word; }
 
-    .total-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
-    .total-amount { font-size: 32px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .total-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px; }
+    .total-amount { font-size: 22px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.3px; margin-bottom: 0; }
 
-    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .btn-copy {
       background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
       color: #FFFFFF; border: none; border-radius: 12px;
-      padding: 14px 12px;
-      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
-      transition: all 0.25s ease; letter-spacing: 0.3px;
+      padding: 10px 8px;
+      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: all 0.25s ease; letter-spacing: 0.2px;
     }
     .btn-copy:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 4px 16px rgba(30, 58, 99, 0.5); }
 
     .btn-print {
       background: rgba(255,255,255,0.93); color: #0d1e38; border: none; border-radius: 12px;
-      padding: 14px 12px;
-      font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
-      transition: all 0.25s ease; letter-spacing: 0.3px;
+      padding: 10px 8px;
+      font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: all 0.25s ease; letter-spacing: 0.2px;
     }
     .btn-print:hover { background: #FFFFFF; box-shadow: 0 4px 16px rgba(255,255,255,0.15); }
 
@@ -467,7 +532,7 @@
        RESPONSIVE — MOBILE (<480px)
     ───────────────────────────────────────── */
     @media (max-width: 479px) {
-      .page-center { padding: 0 25px; }
+      .page-center { padding: 0 16px; }
 
       .logo-container { padding: 12px 14px; gap: 8px; }
       .logo-container svg { width: 32px !important; height: 32px !important; }
@@ -494,6 +559,14 @@
       .footer-details-box { max-width: 130px; }
 
       .toggle-btn { font-size: 11px; padding: 8px 0; }
+
+      .plans-scroll {
+        padding-left: 0;
+        margin-left: -16px;
+        margin-right: -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
     }
 
     /* ─────────────────────────────────────────
@@ -600,7 +673,7 @@
       📞 Contactános
      </div>
      <div class="contact-buttons">
-      <a href="https://wa.me/595986150575" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:#FFFFFF;color:#0d1e38;border:1px solid rgba(255,255,255,0.5);"> <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp </a> <a href="https://instagram.com/attx_detailing" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:#FFFFFF;color:#0d1e38;border:1px solid rgba(255,255,255,0.5);"> <i data-lucide="instagram" style="width:14px;height:14px;"></i> Instagram </a>
+      <a href="https://wa.me/595986150575" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:#FFFFFF;color:#0d1e38;border:1px solid rgba(255,255,255,0.5);"> <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp - Tomás </a> <a href="https://wa.me/595983236082" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:#FFFFFF;color:#0d1e38;border:1px solid rgba(255,255,255,0.5);"> <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WhatsApp - Mathias </a> <a href="https://instagram.com/attx_detailing" target="_blank" rel="noopener noreferrer" class="contact-btn" style="background:#FFFFFF;color:#0d1e38;border:1px solid rgba(255,255,255,0.5);"> <i data-lucide="instagram" style="width:14px;height:14px;"></i> Instagram </a>
      </div>
     </div>
     <div class="sidebar-section">
@@ -632,7 +705,7 @@
    </div>
   </div><!-- MAIN CONTENT -->
   <div class="app-wrapper">
-   <div class="page-center" style="padding: 16px 0;">
+   <div class="page-center" style="padding-top: 16px; padding-bottom: 0;">
     <div class="logo-container" id="logo-container">
      <svg width="38" height="38" viewbox="0 0 44 44" fill="none">
       <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="none" stroke="#4a7fd4" stroke-width="1.5"></polygon> <polygon points="22,8 36,16 36,30 22,38 8,30 8,16" fill="rgba(30,58,99,0.4)" stroke="#1E3A63" stroke-width="1"></polygon> <text x="22" y="27" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="900" font-size="11" fill="#FFFFFF" letter-spacing="0.5">
@@ -660,7 +733,7 @@
      <h1 id="app-title-el" style="font-size: 22px; font-weight: 900; color: #FFFFFF; margin: 0; line-height: 1.2; letter-spacing: -0.3px;">Cotizador de Servicios de Detailing</h1>
     </div>
    </div>
-   <div class="page-center" style="padding: 0;">
+   <div class="page-center" style="padding-top: 0; padding-bottom: 0;">
     <div class="section-title">
      Selecciona tu Plan Base
     </div>
@@ -729,7 +802,7 @@
      </div>
     </div>
    </div>
-   <div class="page-center" style="padding: 20px 0 180px;">
+   <div class="page-center" style="padding-top: 20px; padding-bottom: 180px;">
     <div id="plan-details-container" style="display: none; padding: 0 0 20px;">
      <div style="background: rgba(30, 58, 99, 0.15); border: 1px solid rgba(74, 127, 212, 0.3); border-radius: 12px; padding: 12px; overflow: hidden;">
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
@@ -924,10 +997,10 @@
   </div><!-- FOOTER -->
   <div class="sticky-footer">
    <div class="footer-inner">
-    <div style="display: flex; gap: 16px; align-items: flex-start; justify-content: space-between;">
-     <div style="flex: 1;">
+    <div class="footer-top">
+     <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0;">
       <div class="total-label">
-       Total Estimado
+       Total
       </div>
       <div class="total-amount" id="total-display">
        290.000 Gs
@@ -943,7 +1016,7 @@
      </div>
     </div>
     <div class="action-buttons">
-     <button class="btn-copy" id="copy-btn-el" onclick="copyBudget()"> <i data-lucide="clipboard-copy" style="width:15px;height:15px;"></i> <span id="copy-btn-text">Copiar Presupuesto</span> </button> <button class="btn-print" id="print-btn-el" onclick="printBudget()"> <i data-lucide="printer" style="width:15px;height:15px;color:#0d1e38;"></i> <span id="print-btn-text">Imprimir Presupuesto</span> </button>
+     <button class="btn-copy" id="copy-btn-el" onclick="copyBudget()"> <i data-lucide="clipboard-copy" style="width:13px;height:13px;"></i> <span id="copy-btn-text">Copiar</span> </button> <button class="btn-print" id="print-btn-el" onclick="printBudget()"> <i data-lucide="printer" style="width:13px;height:13px;color:#0d1e38;"></i> <span id="print-btn-text">Imprimir</span> </button>
     </div>
    </div>
   </div>
@@ -1087,7 +1160,13 @@
       document.getElementById('plan-detail-name').textContent = PLANS[planId].name;
       document.getElementById('plan-detail-time').textContent = `⏱️ ${planData.time}`;
 
-      document.getElementById('plan-details-content').innerHTML = planData.benefits.map(s => `
+      const detailsContent = document.getElementById('plan-details-content');
+      detailsContent.classList.remove('plan-details-content');
+      
+      // Force reflow to restart animation
+      void detailsContent.offsetWidth;
+      
+      detailsContent.innerHTML = planData.benefits.map(s => `
         <div style="background:${c.bg};border:1px solid ${c.border};border-radius:10px;padding:10px;border-left:3px solid ${c.label};">
           <div style="font-size:12px;font-weight:700;color:${c.label};text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;display:flex;align-items:center;gap:4px;">
             <i data-lucide="${s.label==='Exterior'?'palette':'package'}" style="width:13px;height:13px;"></i>
@@ -1102,6 +1181,7 @@
           </div>
         </div>`).join('');
 
+      detailsContent.classList.add('plan-details-content');
       setTimeout(() => lucide.createIcons(), 50);
     }
 
@@ -1248,7 +1328,7 @@
           ${s.items.map(i => `<div style="margin-left:12px;color:rgba(13,30,56,0.8);font-size:12px;line-height:1.6;">• ${i}</div>`).join('')}
         </div>`).join('');
 
-      const content = `<html><head><title>Presupuesto ATTX</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:40px 20px;}.container{max-width:580px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:36px 30px;text-align:center;color:#fff;}.logo{font-size:28px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:32px 28px;}.section{margin-bottom:24px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:16px;}.planname{font-size:14px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:22px;font-weight:900;color:#1E3A63;margin-bottom:12px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:22px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;}.gtotal{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:12px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:26px;font-weight:900;}.footer{text-align:center;padding:18px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:11px;color:rgba(13,30,56,0.6);}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:14px;font-weight:700;color:#0d1e38;">${v}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:20px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${extrasCost>0?`<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost)}</span></div>`:''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
+      const content = `<html><head><title>Presupuesto ATTX</title><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:20px;}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:30px 24px;text-align:center;color:#fff;}.logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:24px 20px;}.section{margin-bottom:20px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:14px;}.planname{font-size:13px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:20px;font-weight:900;color:#1E3A63;margin-bottom:10px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:18px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}.gtotal{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:11px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:22px;font-weight:900;}.footer{text-align:center;padding:16px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:10px;color:rgba(13,30,56,0.6);}@media print{body{padding:0;background:none;}@page{margin:0;}.container{box-shadow:none;border-radius:0;}.body{padding:20px 16px;}.section{margin-bottom:16px;}}@media (max-width:600px){.body{padding:18px 16px;}.header{padding:24px 16px;}.container{border-radius:12px;}.planbox{padding:12px;}.totals{padding:16px;}.logo{font-size:20px;}.planprice{font-size:18px;}.gtamt{font-size:20px;}}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:13px;font-weight:700;color:#0d1e38;">${v}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:16px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${extrasCost>0?`<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost)}</span></div>`:''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
 
       const pw = window.open('', '', 'height=800,width=900');
       pw.document.write(content);
@@ -1450,5 +1530,5 @@
       });
     } catch(e) { /* SDK not available */ }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e7c1ebfa0523f3a',t:'MTc3NTQyOTUxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e82b4c310253f3a',t:'MTc3NTQ5ODU3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
