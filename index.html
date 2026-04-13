@@ -12,14 +12,14 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; padding: 0; }
-
+ 
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: #060C17;
       color: #FFFFFF;
       overflow-x: hidden;
     }
-
+ 
     /* ─────────────────────────────────────────
        LAYOUT PRINCIPAL
     ───────────────────────────────────────── */
@@ -30,7 +30,7 @@
       display: flex;
       flex-direction: column;
     }
-
+ 
     .bg-grid {
       position: fixed;
       inset: 0;
@@ -41,7 +41,7 @@
       pointer-events: none;
       z-index: 0;
     }
-
+ 
     /* Contenedor central con max-width para desktop */
     .page-center {
       position: relative;
@@ -52,7 +52,7 @@
       padding-left: 16px;
       padding-right: 16px;
     }
-
+ 
     /* ─────────────────────────────────────────
        HEADER / LOGO
     ───────────────────────────────────────── */
@@ -65,7 +65,7 @@
       align-items: center;
       gap: 12px;
     }
-
+ 
     /* ─────────────────────────────────────────
        VEHICLE TOGGLE
     ───────────────────────────────────────── */
@@ -78,7 +78,7 @@
       padding: 3px;
       gap: 3px;
     }
-
+ 
     .toggle-btn {
       padding: 10px 0;
       border-radius: 8px;
@@ -94,23 +94,23 @@
       justify-content: center;
       gap: 5px;
     }
-
+ 
     .toggle-btn.active {
       background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
       color: #FFFFFF;
       box-shadow: 0 4px 15px rgba(30, 58, 99, 0.5);
     }
-
+ 
     .toggle-btn.inactive {
       background: transparent;
       color: rgba(255,255,255,0.45);
     }
-
+ 
     .toggle-btn.inactive:hover {
       background: rgba(30, 58, 99, 0.2);
       color: rgba(255,255,255,0.7);
     }
-
+ 
     /* ─────────────────────────────────────────
        PLANS SCROLL
     ───────────────────────────────────────── */
@@ -124,7 +124,7 @@
       -webkit-overflow-scrolling: touch;
       user-select: none;
     }
-
+ 
     @media (max-width: 768px) {
       .plans-scroll {
         padding-left: 0;
@@ -135,7 +135,7 @@
       }
     }
     .plans-scroll::-webkit-scrollbar { display: none; }
-
+ 
     .plan-card {
       min-width: 175px;
       flex-shrink: 0;
@@ -147,44 +147,44 @@
       transition: all 0.2s ease;
       position: relative;
     }
-
+ 
     .plan-card:hover { border-color: rgba(30, 58, 99, 0.5); }
-
+ 
     .plan-card.selected {
       border-color: #4a7fd4;
       background: linear-gradient(145deg, rgba(30, 58, 99, 0.4) 0%, rgba(13, 30, 56, 0.3) 100%);
       box-shadow: 0 8px 24px rgba(74, 127, 212, 0.2);
     }
-
+ 
     .plan-card.featured {
       border-color: rgba(74, 127, 212, 0.4);
       background: linear-gradient(145deg, rgba(74, 127, 212, 0.12) 0%, rgba(30, 58, 99, 0.15) 100%);
     }
-
+ 
     .plan-card.featured.selected { box-shadow: 0 10px 32px rgba(74, 127, 212, 0.25); }
-
+ 
     /* Focus animation for selected plan */
     .plan-card.focused {
       animation: planFocus 0.5s ease forwards;
       position: relative;
       z-index: 10;
     }
-
+ 
     @keyframes planFocus {
       0% { opacity: 1; transform: scale(1); }
       100% { opacity: 1; transform: scale(1.008); }
     }
-
+ 
     .plan-card.blurred {
       opacity: 0.35;
       transition: opacity 0.5s ease;
     }
-
+ 
     /* Plan Details Animation */
     .plan-details-content {
       animation: detailsFadeIn 0.4s ease forwards;
     }
-
+ 
     @keyframes detailsFadeIn {
       from {
         opacity: 0;
@@ -195,7 +195,7 @@
         transform: translateY(0);
       }
     }
-
+ 
     .featured-badge {
       background: linear-gradient(135deg, #1E3A63, #264d84);
       color: #fff;
@@ -208,7 +208,7 @@
       display: inline-block;
       margin-bottom: 6px;
     }
-
+ 
     .plan-icon-wrap {
       width: 28px;
       height: 28px;
@@ -219,10 +219,10 @@
       justify-content: center;
       margin-bottom: 6px;
     }
-
+ 
     .plan-title { font-size: 12.6px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; line-height: 1.2; }
     .plan-price-main { font-size: 16.8px; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-bottom: 8px; }
-
+ 
     .plan-select-indicator {
       width: 16px; height: 16px;
       border: 2px solid rgba(30,58,99,0.5);
@@ -232,7 +232,7 @@
       transition: all 0.2s ease;
     }
     .plan-card.selected .plan-select-indicator { background: #1E3A63; border-color: #4a7fd4; }
-
+ 
     /* ─────────────────────────────────────────
        SECTION TITLES
     ───────────────────────────────────────── */
@@ -244,7 +244,7 @@
       letter-spacing: 1.2px;
       margin-bottom: 12px;
     }
-
+ 
     /* ─────────────────────────────────────────
        EXTRAS
     ───────────────────────────────────────── */
@@ -262,7 +262,7 @@
     }
     .extra-item:hover { border-color: rgba(30, 58, 99, 0.5); background: rgba(30, 58, 99, 0.08); }
     .extra-item.checked { border-color: rgba(30, 58, 99, 0.6); background: rgba(30, 58, 99, 0.12); }
-
+ 
     .custom-checkbox {
       width: 20px; height: 20px; min-width: 20px;
       border: 2px solid rgba(30,58,99,0.6);
@@ -271,11 +271,11 @@
       transition: all 0.2s ease; background: transparent;
     }
     .custom-checkbox.checked { background: #1E3A63; border-color: #4a7fd4; }
-
+ 
     .extra-name { flex: 1; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); line-height: 1.3; }
     .extra-price { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.7); white-space: nowrap; }
     .extra-price.active { color: #FFFFFF; }
-
+ 
     /* ─────────────────────────────────────────
        QTY CONTROLS
     ───────────────────────────────────────── */
@@ -289,7 +289,7 @@
     }
     .qty-btn:hover { background: rgba(30,58,99,0.5); border-color: #4a7fd4; }
     .qty-value { font-size: 15px; font-weight: 700; color: #FFFFFF; min-width: 20px; text-align: center; }
-
+ 
     /* ─────────────────────────────────────────
        STICKY FOOTER
     ───────────────────────────────────────── */
@@ -303,7 +303,7 @@
       box-shadow: 0 -8px 32px rgba(6, 12, 23, 0.8);
       z-index: 30;
     }
-
+ 
     .footer-inner {
       max-width: 600px;
       margin: 0 auto;
@@ -312,14 +312,14 @@
       gap: 8px;
       align-items: stretch;
     }
-
+ 
     .footer-top {
       display: flex;
       gap: 10px;
       align-items: stretch;
       justify-content: space-between;
     }
-
+ 
     .footer-details-box {
       background: rgba(30, 58, 99, 0.1);
       border: 1px solid rgba(30, 58, 99, 0.2);
@@ -336,7 +336,7 @@
       flex-direction: column;
       justify-content: center;
     }
-
+ 
     @media (max-width: 479px) {
       .footer-details-box {
         padding: 6px 8px;
@@ -344,12 +344,12 @@
         min-width: 100px;
         flex: 1;
       }
-
+ 
       .footer-detail-label {
         font-size: 6px !important;
         margin-bottom: 1px;
       }
-
+ 
       .footer-detail-value {
         font-size: 8px !important;
         line-height: 1.1;
@@ -358,20 +358,20 @@
         text-overflow: ellipsis;
       }
     }
-
+ 
     .footer-detail-label {
       font-weight: 700; color: rgba(255,255,255,0.85);
       text-transform: uppercase; letter-spacing: 0.3px;
       font-size: 8px; margin-bottom: 1px; display: block;
     }
-
+ 
     .footer-detail-value { font-size: 8px; color: rgba(255,255,255,0.75); line-height: 1.2; word-break: break-word; }
-
+ 
     .total-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px; }
     .total-amount { font-size: 22px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.3px; margin-bottom: 0; }
-
+ 
     .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
+ 
     .btn-copy {
       background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
       color: #FFFFFF; border: none; border-radius: 12px;
@@ -381,7 +381,7 @@
       transition: all 0.25s ease; letter-spacing: 0.2px;
     }
     .btn-copy:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 4px 16px rgba(30, 58, 99, 0.5); }
-
+ 
     .btn-print {
       background: rgba(255,255,255,0.93); color: #0d1e38; border: none; border-radius: 12px;
       padding: 10px 8px;
@@ -390,7 +390,7 @@
       transition: all 0.25s ease; letter-spacing: 0.2px;
     }
     .btn-print:hover { background: #FFFFFF; box-shadow: 0 4px 16px rgba(255,255,255,0.15); }
-
+ 
     /* ─────────────────────────────────────────
        TOAST
     ───────────────────────────────────────── */
@@ -405,7 +405,7 @@
       z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+ 
     /* ─────────────────────────────────────────
        SIDEBAR
     ───────────────────────────────────────── */
@@ -419,7 +419,7 @@
       transition: all 0.3s ease;
     }
     .sidebar-toggle:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 6px 20px rgba(30, 58, 99, 0.6); }
-
+ 
     .sidebar-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.5);
@@ -427,7 +427,7 @@
       transition: opacity 0.3s ease; z-index: 40;
     }
     .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
-
+ 
     .sidebar-container {
       position: fixed; top: 0; bottom: 0;
       left: -85%; width: 80%;
@@ -441,11 +441,11 @@
       box-shadow: 4px 0 20px rgba(0,0,0,0.5);
     }
     .sidebar-container.open { left: 0; }
-
+ 
     .sidebar-content { padding: 24px 16px; flex: 1; }
     .sidebar-section { margin-bottom: 24px; }
     .sidebar-title { font-size: 11px; font-weight: 700; color: rgba(30,58,99,0.8); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
-
+ 
     .contact-buttons { display: flex; flex-direction: column; gap: 10px; }
     .contact-btn {
       background: linear-gradient(135deg, #1E3A63 0%, #264d84 100%);
@@ -456,7 +456,7 @@
       transition: all 0.25s ease; text-decoration: none;
     }
     .contact-btn:hover { background: linear-gradient(135deg, #264d84 0%, #2d5a9e 100%); box-shadow: 0 4px 12px rgba(30, 58, 99, 0.4); border-color: rgba(74, 127, 212, 0.6); }
-
+ 
     .info-box {
       background: rgba(74, 127, 212, 0.1);
       border: 1px solid rgba(74, 127, 212, 0.3);
@@ -464,7 +464,7 @@
       font-size: 10px; color: rgba(255,255,255,0.8); line-height: 1.5; text-align: center;
     }
     .info-box strong { display: block; color: rgba(255,255,255,0.95); margin-bottom: 4px; }
-
+ 
     /* ─────────────────────────────────────────
        PLAN MODAL
     ───────────────────────────────────────── */
@@ -474,7 +474,7 @@
       animation: fadeIn 0.3s ease;
     }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+ 
     .plan-modal {
       position: fixed; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -482,7 +482,7 @@
       animation: slideUp 0.3s ease;
     }
     @keyframes slideUp { from { transform: translate(-50%, -45%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
-
+ 
     .plan-modal-content {
       background: linear-gradient(160deg, #0d1e38 0%, #091528 100%);
       border: 1px solid rgba(30, 58, 99, 0.5);
@@ -492,13 +492,13 @@
     }
     .plan-modal-content::-webkit-scrollbar { width: 4px; }
     .plan-modal-content::-webkit-scrollbar-thumb { background: #1E3A63; border-radius: 2px; }
-
+ 
     .modal-plan-item { margin-bottom: 12px; padding: 12px; background: rgba(30, 58, 99, 0.15); border: 1px solid rgba(30, 58, 99, 0.3); border-radius: 10px; }
     .modal-plan-label { font-size: 11px; font-weight: 700; color: rgba(74, 127, 212, 0.8); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
     .modal-plan-text { font-size: 12px; color: rgba(255, 255, 255, 0.8); line-height: 1.5; }
     .modal-plan-list { font-size: 12px; color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin: 0; padding-left: 16px; }
     .modal-plan-list li { margin-bottom: 6px; }
-
+ 
     /* ─────────────────────────────────────────
        TIP CARDS
     ───────────────────────────────────────── */
@@ -509,7 +509,7 @@
       transition: background 0.2s ease;
     }
     .tip-card:hover { background: rgba(30, 58, 99, 0.15); }
-
+ 
     /* ─────────────────────────────────────────
        DURATIONS in sidebar
     ───────────────────────────────────────── */
@@ -520,46 +520,46 @@
       transition: all 0.2s ease;
     }
     .plan-duration-card:hover { background: rgba(74,127,212,0.18); }
-
+ 
     /* ─────────────────────────────────────────
        SCROLLBAR GLOBAL
     ───────────────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #060C17; }
     ::-webkit-scrollbar-thumb { background: #1E3A63; border-radius: 2px; }
-
+ 
     /* ─────────────────────────────────────────
        RESPONSIVE — MOBILE (<480px)
     ───────────────────────────────────────── */
     @media (max-width: 479px) {
       .page-center { padding: 0 16px; }
-
+ 
       .logo-container { padding: 12px 14px; gap: 8px; }
       .logo-container svg { width: 32px !important; height: 32px !important; }
       #brand-name-el { font-size: 15px !important; }
-
+ 
       #app-title-el { font-size: 18px !important; line-height: 1.25; }
-
+ 
       .plan-card { min-width: 148px; padding: 10px 10px; }
       .plan-title { font-size: 12px; }
       .plan-price-main { font-size: 15px; }
       .plan-icon-wrap { width: 22px; height: 22px; margin-bottom: 4px; }
       .featured-badge { font-size: 7px; padding: 2px 7px; }
-
+ 
       .extra-item { padding: 10px 10px; }
       .extra-name { font-size: 12px; }
       .extra-price { font-size: 12px; }
-
+ 
       .section-title { font-size: 9px; }
-
+ 
       .total-amount { font-size: 26px; }
-
+ 
       .btn-copy, .btn-print { font-size: 11px; padding: 11px 8px; gap: 5px; }
-
+ 
       .footer-details-box { max-width: 130px; }
-
+ 
       .toggle-btn { font-size: 11px; padding: 8px 0; }
-
+ 
       .plans-scroll {
         padding-left: 0;
         margin-left: -16px;
@@ -568,44 +568,44 @@
         padding-right: 16px;
       }
     }
-
+ 
     /* ─────────────────────────────────────────
        RESPONSIVE — TABLET (480–767px)
     ───────────────────────────────────────── */
     @media (min-width: 480px) and (max-width: 767px) {
       .plan-card { min-width: 165px; }
     }
-
+ 
     /* ─────────────────────────────────────────
        RESPONSIVE — DESKTOP (768px+)
     ───────────────────────────────────────── */
     @media (min-width: 768px) {
       .page-center { padding: 0 24px; }
-
+ 
       .logo-container { padding: 20px 28px; }
       #brand-name-el { font-size: 20px !important; }
       #app-title-el { font-size: 26px !important; }
-
+ 
       .plan-card { min-width: 185px; }
       .plan-title { font-size: 16px; }
       .plan-price-main { font-size: 22px; }
-
+ 
       .extra-name { font-size: 15px; }
       .extra-price { font-size: 15px; }
-
+ 
       .section-title { font-size: 12px; }
-
+ 
       .total-amount { font-size: 28px; }
       .total-label { font-size: 11px; }
-
+ 
       .btn-copy, .btn-print { font-size: 13px; padding: 12px 12px; }
-
+ 
       .footer-details-box { max-width: 180px; font-size: 12px; padding: 12px 14px; }
       .footer-detail-label { font-size: 12px; }
       .footer-detail-value { font-size: 13px; }
-
+ 
       .sticky-footer { padding: 12px 24px 14px; }
-
+ 
       /* Sidebar en desktop queda fijo a la izquierda */
       .sidebar-overlay { display: none !important; }
       .sidebar-container {
@@ -613,11 +613,11 @@
       }
       .sidebar-container.open { left: 0; }
     }
-
+ 
     @media (min-width: 1024px) {
       .page-center { max-width: 680px; }
     }
-
+ 
     @media (min-width: 1280px) {
       .page-center { max-width: 720px; }
     }
@@ -715,15 +715,44 @@
       </div>
      </div>
     </div>
-    <div style="margin: 20px 0;">
-     <div class="vehicle-toggle" id="vehicle-toggle"><button class="toggle-btn active" id="btn-auto" onclick="selectVehicle('auto')">🚗 Auto</button> <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">🚙 Camioneta</button>
-     </div>
-    </div>
-    <div style="margin-bottom: 24px;">
+    <div style="margin-bottom: 20px; margin-top: 20px;">
      <div style="font-size: 9px; font-weight: 700; color: rgba(30,58,99,0.8); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;">
       Herramienta
      </div>
      <h1 id="app-title-el" style="font-size: 22px; font-weight: 900; color: #FFFFFF; margin: 0; line-height: 1.2; letter-spacing: -0.3px;">Cotizador de Servicios de Detailing</h1>
+    </div>
+    <div style="margin-bottom: 12px;">
+     <div class="vehicle-toggle" id="vehicle-toggle"><button class="toggle-btn active" id="btn-auto" onclick="selectVehicle('auto')">🚗 Auto</button> <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">🚙 Camioneta</button>
+     </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+     <!-- Campo: Modelo del vehículo -->
+     <div>
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🚗 Modelo del vehículo</div>
+      <input
+        type="text"
+        id="vehicle-model"
+        placeholder="Ej: Toyota Corolla"
+        style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;color:#FFFFFF;outline:none;transition:border-color 0.2s ease;"
+        onfocus="this.style.borderColor='rgba(74,127,212,0.7)'"
+        onblur="this.style.borderColor='rgba(30,58,99,0.45)'"
+      >
+     </div>
+     <!-- Campo: Traslado a domicilio -->
+     <div>
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🏠 Traslado a domicilio (Gs)</div>
+      <input
+        type="number"
+        id="transfer-cost"
+        min="0"
+        step="1000"
+        placeholder="0"
+        oninput="updateTotal()"
+        style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;color:#FFFFFF;outline:none;transition:border-color 0.2s ease;-moz-appearance:textfield;"
+        onfocus="this.style.borderColor='rgba(74,127,212,0.7)'"
+        onblur="this.style.borderColor='rgba(30,58,99,0.45)'"
+      >
+     </div>
     </div>
    </div>
    <div class="page-center" style="padding-top: 0; padding-bottom: 0;">
@@ -1012,13 +1041,13 @@
        STATE & DATA
     ───────────────────────────────────────── */
     const state = { vehicle: 'auto', plan: 'detallado', extras: { 1: false, 2: false, 3: false, 4: false }, qty: 1, multiPlanEnabled: false };
-
+ 
     const PLANS = {
       express:   { auto: 90000,  camioneta: 130000, name: 'Plan Express / Mant.' },
       detallado: { auto: 200000, camioneta: 250000, name: 'Plan Detallado' },
       premium:   { auto: 380000, camioneta: 460000, name: 'Plan Premium+' }
     };
-
+ 
     const PLAN_BENEFITS = {
       express: {
         time: '2-3 horas',
@@ -1042,27 +1071,27 @@
         ]
       }
     };
-
+ 
     const EXTRAS = { 1: 50000, 2: 100000, 3: 100000 };
     const VENTANILLA_PRICE = 30000;
-
+ 
     /* ─────────────────────────────────────────
        HELPERS
     ───────────────────────────────────────── */
     function formatGsFull(n) { return n.toLocaleString('es-PY') + ' Gs'; }
-
+ 
     function getPlanColors(planId) {
       if (planId === 'premium') return { bg: 'rgba(212,165,116,0.15)', border: '#d4a574', label: '#d4a574' };
       if (planId === 'detallado') return { bg: 'rgba(74,127,212,0.15)', border: 'rgba(74,127,212,0.3)', label: 'rgba(74,127,212,0.95)' };
       return { bg: 'rgba(122,138,154,0.15)', border: 'rgba(122,138,154,0.3)', label: 'rgba(122,138,154,0.95)' };
     }
-
+ 
     function getLastDayOfMonth() {
       const now = new Date();
       return new Date(now.getFullYear(), now.getMonth() + 1, 0)
         .toLocaleDateString('es-PY', { day: 'numeric', month: 'long', year: 'numeric' });
     }
-
+ 
     /* ─────────────────────────────────────────
        VEHICLE
     ───────────────────────────────────────── */
@@ -1074,7 +1103,7 @@
       updateTotal();
       updateSummary();
     }
-
+ 
     /* ─────────────────────────────────────────
        PLAN SELECTION
     ───────────────────────────────────────── */
@@ -1099,16 +1128,16 @@
           chk.style.display = 'none';
         }
       });
-
+ 
       if (p === 'express' && !state.multiPlanEnabled) [1,2,3,4].forEach(n => { if (state.extras[n]) toggleExtra(n); });
-
+ 
       updateExtrasAvailability();
       updatePlanDetails(p);
       document.getElementById('plan-details-container').style.display = 'block';
       updateTotal();
       updateSummary();
     }
-
+ 
     function updateExtrasAvailability() {
       const isExpress = state.plan === 'express' && !state.multiPlanEnabled;
       [1,2,3,4].forEach(n => {
@@ -1119,7 +1148,7 @@
           item.style.cursor = isExpress ? 'not-allowed' : 'pointer';
         }
       });
-
+ 
       let msgEl = document.getElementById('express-message');
       if (isExpress) {
         msgEl.style.display = 'flex';
@@ -1127,16 +1156,16 @@
         msgEl.style.display = 'none';
       }
     }
-
+ 
     function updatePlanDetails(planId) {
       const planData = PLAN_BENEFITS[planId];
       const icons = { express: '⚡', detallado: '✨', premium: '👑' };
       const c = getPlanColors(planId);
-
+ 
       document.getElementById('plan-detail-icon').textContent = icons[planId];
       document.getElementById('plan-detail-name').textContent = PLANS[planId].name;
       document.getElementById('plan-detail-time').textContent = `⏱️ ${planData.time}`;
-
+ 
       const detailsContent = document.getElementById('plan-details-content');
       detailsContent.classList.remove('plan-details-content');
       
@@ -1157,18 +1186,18 @@
               </div>`).join('')}
           </div>
         </div>`).join('');
-
+ 
       detailsContent.classList.add('plan-details-content');
       setTimeout(() => lucide.createIcons(), 50);
     }
-
+ 
     function updatePlanPrices() {
       ['express','detallado','premium'].forEach((planId, i) => {
         const el = document.getElementById('plan' + (i+1) + '-price-main');
         if (el) el.textContent = formatGsFull(PLANS[planId][state.vehicle]);
       });
     }
-
+ 
     /* ─────────────────────────────────────────
        EXTRAS
     ───────────────────────────────────────── */
@@ -1181,17 +1210,17 @@
       document.getElementById('cbicon-' + n).style.display = checked ? 'block' : 'none';
       const price = document.getElementById('price-' + n);
       if (price) price.classList.toggle('active', checked);
-
+ 
       if (n === 4) {
         const qtyControls = document.getElementById('qty-controls');
         if (qtyControls) qtyControls.style.display = checked ? 'block' : 'none';
         if (price) price.textContent = formatGsFull(checked ? state.qty * VENTANILLA_PRICE : VENTANILLA_PRICE);
       }
-
+ 
       updateTotal();
       updateSummary();
     }
-
+ 
     function changeQty(event, delta) {
       event.stopPropagation();
       state.qty = Math.max(1, Math.min(20, state.qty + delta));
@@ -1202,17 +1231,23 @@
       updateTotal();
       updateSummary();
     }
-
+ 
     /* ─────────────────────────────────────────
        TOTALS & SUMMARY
     ───────────────────────────────────────── */
+    function getTransferCost() {
+      const val = parseInt(document.getElementById('transfer-cost').value, 10);
+      return isNaN(val) || val < 0 ? 0 : val;
+    }
+ 
     function updateTotal() {
       const planCost   = PLANS[state.plan][state.vehicle];
       const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
       const qtyCost    = state.extras[4] ? state.qty * VENTANILLA_PRICE : 0;
-      document.getElementById('total-display').textContent = formatGsFull(planCost + extrasCost + qtyCost);
+      const transfer   = getTransferCost();
+      document.getElementById('total-display').textContent = formatGsFull(planCost + extrasCost + qtyCost + transfer);
     }
-
+ 
     function updateSummary() {
       const extraNames = { 1: 'Lluvia ácida retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización asientos' };
       const activeExtras = [1,2,3].filter(n => state.extras[n]).map(n => extraNames[n]);
@@ -1220,20 +1255,23 @@
       const summary = PLANS[state.plan].name + (activeExtras.length ? ' + ' + activeExtras.join(', ') : '');
       document.getElementById('detail-services').textContent = summary;
     }
-
+ 
     /* ─────────────────────────────────────────
        COPY & PRINT
     ───────────────────────────────────────── */
     function copyBudget() {
       const v    = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+      const vehicleModel = (document.getElementById('vehicle-model').value || '').trim();
       const plan = PLANS[state.plan].name;
       const pCost = PLANS[state.plan][state.vehicle];
-      const lines = ['=== ATTX Detailing — Presupuesto ===', '', `Vehículo: ${v}`, `Plan: ${plan} — ${formatGsFull(pCost)}`, ''];
+      const transfer = getTransferCost();
+      const vehicleLabel = vehicleModel ? `${v} — ${vehicleModel}` : v;
+      const lines = ['=== ATTX Detailing — Presupuesto ===', '', `Vehículo: ${vehicleLabel}`, `Plan: ${plan} — ${formatGsFull(pCost)}`, ''];
       const extraNames = { 1: 'Lluvia ácida de retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización de asientos' };
       const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
       const qtyCost = state.extras[4] ? state.qty * VENTANILLA_PRICE : 0;
-      const total = pCost + extrasCost + qtyCost;
-
+      const total = pCost + extrasCost + qtyCost + transfer;
+ 
       let hasExtras = false;
       [1,2,3].forEach(n => { 
         if (state.extras[n]) {
@@ -1245,10 +1283,12 @@
         if (!hasExtras) lines.push('--- Extras ---');
         lines.push(`• Lluvia ácida en ventanillas x${state.qty}: ${formatGsFull(qtyCost)}`);
       }
-
+ 
+      if (transfer > 0) lines.push(`• Traslado a domicilio: ${formatGsFull(transfer)}`);
+ 
       lines.push('');
       lines.push(`TOTAL ESTIMADO: ${formatGsFull(total)}`);
-
+ 
       const text = lines.join('\n');
       
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1260,7 +1300,7 @@
         fallbackCopy(text);
       }
     }
-
+ 
     function fallbackCopy(text) {
       const textarea = document.createElement('textarea');
       textarea.value = text;
@@ -1277,17 +1317,19 @@
       }
       document.body.removeChild(textarea);
     }
-
+ 
     function printBudget() {
       const v = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+      const vehicleModel = (document.getElementById('vehicle-model').value || '').trim();
+      const transfer = getTransferCost();
       const plan = PLANS[state.plan].name;
       const pCost = PLANS[state.plan][state.vehicle];
       const planData = PLAN_BENEFITS[state.plan];
       const extrasCost = [1,2,3].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0);
       const ventanillasCost = state.extras[4] ? state.qty * VENTANILLA_PRICE : 0;
-      const total = pCost + extrasCost + ventanillasCost;
+      const total = pCost + extrasCost + ventanillasCost + transfer;
       const extraNames = { 1: 'Remoción de lluvia ácida en retrovisores', 2: 'Limpieza de techo', 3: 'Revitalización de asientos', 4: 'Remoción de lluvia ácida en ventanillas' };
-
+ 
       let extrasHTML = '';
       let hasExtras = false;
       [1,2,3,4].forEach(n => {
@@ -1299,21 +1341,21 @@
         }
       });
       if (hasExtras) extrasHTML += '</div></div>';
-
+ 
       const benefitsHTML = planData.benefits.map(s => `
         <div style="margin-bottom:10px;">
           <div style="font-weight:700;color:#1E3A63;margin-bottom:4px;font-size:11px;">${s.label}</div>
           ${s.items.map(i => `<div style="margin-left:12px;color:rgba(13,30,56,0.8);font-size:12px;line-height:1.6;">• ${i}</div>`).join('')}
         </div>`).join('');
-
-      const content = `<html><head><title>Presupuesto ATTX</title><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:20px;}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:30px 24px;text-align:center;color:#fff;}.logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:24px 20px;}.section{margin-bottom:20px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:14px;}.planname{font-size:13px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:20px;font-weight:900;color:#1E3A63;margin-bottom:10px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:18px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}.gtotal{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:11px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:22px;font-weight:900;}.footer{text-align:center;padding:16px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:10px;color:rgba(13,30,56,0.6);}@media print{body{padding:0;background:none;}@page{margin:0;}.container{box-shadow:none;border-radius:0;}.body{padding:20px 16px;}.section{margin-bottom:16px;}}@media (max-width:600px){.body{padding:18px 16px;}.header{padding:24px 16px;}.container{border-radius:12px;}.planbox{padding:12px;}.totals{padding:16px;}.logo{font-size:20px;}.planprice{font-size:18px;}.gtamt{font-size:20px;}}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:13px;font-weight:700;color:#0d1e38;">${v}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:16px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${extrasCost>0?`<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost + ventanillasCost)}</span></div>`:ventanillasCost>0?`<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(ventanillasCost)}</span></div>`:''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
-
+ 
+      const content = `<html><head><title>Presupuesto ATTX</title><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:20px;}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:30px 24px;text-align:center;color:#fff;}.logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:24px 20px;}.section{margin-bottom:20px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:14px;}.planname{font-size:13px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:20px;font-weight:900;color:#1E3A63;margin-bottom:10px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:18px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}.gtotal{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:11px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:22px;font-weight:900;}.footer{text-align:center;padding:16px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:10px;color:rgba(13,30,56,0.6);}@media print{body{padding:0;background:none;}@page{margin:0;}.container{box-shadow:none;border-radius:0;}.body{padding:20px 16px;}.section{margin-bottom:16px;}}@media (max-width:600px){.body{padding:18px 16px;}.header{padding:24px 16px;}.container{border-radius:12px;}.planbox{padding:12px;}.totals{padding:16px;}.logo{font-size:20px;}.planprice{font-size:18px;}.gtamt{font-size:20px;}}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:13px;font-weight:700;color:#0d1e38;">${v}${vehicleModel ? ' — ' + vehicleModel : ''}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:16px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${(extrasCost + ventanillasCost) > 0 ? `<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost + ventanillasCost)}</span></div>` : ''}${transfer > 0 ? `<div class="trow"><span style="opacity:0.8;">🏠 Traslado a domicilio</span><span style="font-weight:700;">${formatGsFull(transfer)}</span></div>` : ''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
+ 
       const pw = window.open('', '', 'height=800,width=900');
       pw.document.write(content);
       pw.document.close();
       setTimeout(() => { pw.print(); showToast('¡Presupuesto impreso! 🖨️'); }, 250);
     }
-
+ 
     /* ─────────────────────────────────────────
        TOAST
     ───────────────────────────────────────── */
@@ -1325,7 +1367,7 @@
       if (toastTimer) clearTimeout(toastTimer);
       toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
     }
-
+ 
     /* ─────────────────────────────────────────
        SIDEBAR
     ───────────────────────────────────────── */
@@ -1333,7 +1375,7 @@
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('sidebar-overlay').classList.toggle('open');
     }
-
+ 
     function toggleMultiPlan() {
       state.multiPlanEnabled = !state.multiPlanEnabled;
       const toggle = document.getElementById('multi-plan-toggle');
@@ -1377,14 +1419,14 @@
       updateTotal();
       updateSummary();
     }
-
+ 
     /* ─────────────────────────────────────────
        PLAN MODAL
     ───────────────────────────────────────── */
     function openPlanModal(planId) {
       const c = getPlanColors(planId);
       const planData = PLAN_BENEFITS[planId];
-
+ 
       document.getElementById('modal-plan-title').textContent = PLANS[planId].name;
       document.getElementById('modal-plan-content').innerHTML = `
         <div class="modal-plan-item" style="background:${c.bg};border:1px solid ${c.border};">
@@ -1400,26 +1442,26 @@
             <div class="modal-plan-label" style="color:${c.label};">${s.label}</div>
             <ul class="modal-plan-list">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>
           </div>`).join('')}`;
-
+ 
       document.getElementById('plan-modal').style.display = 'block';
       document.getElementById('plan-modal-overlay').style.display = 'block';
       document.body.style.overflow = 'hidden';
     }
-
+ 
     function closePlanModal() {
       document.getElementById('plan-modal').style.display = 'none';
       document.getElementById('plan-modal-overlay').style.display = 'none';
       document.body.style.overflow = '';
     }
-
+ 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlanModal(); });
-
+ 
     /* ─────────────────────────────────────────
        TIPS CAROUSEL
     ───────────────────────────────────────── */
     let currentTip = 0;
     let carouselTimer = null;
-
+ 
     function goToTip(index) {
       currentTip = index;
       const carousel = document.getElementById('tips-carousel');
@@ -1443,16 +1485,16 @@
       clearInterval(carouselTimer);
       startCarousel();
     }
-
+ 
     function nextTip() {
       currentTip = (currentTip + 1) % 4;
       goToTip(currentTip);
     }
-
+ 
     function startCarousel() {
       carouselTimer = setInterval(nextTip, 5000);
     }
-
+ 
     /* ─────────────────────────────────────────
        INIT
     ───────────────────────────────────────── */
@@ -1463,9 +1505,9 @@
       startCarousel();
       setTimeout(() => lucide.createIcons(), 100);
     }
-
+ 
     init();
-
+ 
     /* ─────────────────────────────────────────
        SDK CONFIG (si está disponible)
     ───────────────────────────────────────── */
@@ -1478,7 +1520,7 @@
         background_color: '#060C17', surface_color: '#0d1e38', text_color: '#FFFFFF',
         accent_color: '#1E3A63', font_family: 'Montserrat', font_size: 16
       };
-
+ 
       window.elementSdk && window.elementSdk.init({
         defaultConfig,
         onConfigChange: (config) => {
