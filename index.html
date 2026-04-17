@@ -740,19 +740,25 @@
      </div>
      <!-- Campo: Traslado a domicilio -->
      <div>
-      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🏠 Traslado a domicilio (Gs)</div>
-      <input
-        type="number"
-        id="transfer-cost"
-        min="0"
-        step="1000"
-        placeholder="0"
-        oninput="updateTotal()"
-        style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;color:#FFFFFF;outline:none;transition:border-color 0.2s ease;-moz-appearance:textfield;"
-        onfocus="this.style.borderColor='rgba(74,127,212,0.7)'"
-        onblur="this.style.borderColor='rgba(30,58,99,0.45)'"
-      >
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🏠 Traslado a domicilio</div>
+      <button onclick="useGPS()" id="gps-btn" style="width:100%;background:linear-gradient(135deg,rgba(30,58,99,0.4),rgba(38,77,132,0.4));border:1px solid rgba(74,127,212,0.4);border-radius:10px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s ease;" onmouseover="this.style.borderColor='rgba(74,127,212,0.8)'" onmouseout="this.style.borderColor='rgba(74,127,212,0.4)'">
+        <span id="gps-icon">📍</span> <span id="gps-label">Usar mi ubicación</span>
+      </button>
+      <input type="hidden" id="transfer-cost" value="0">
+      <div id="location-result" style="display:none;margin-top:6px;background:rgba(30,58,99,0.15);border:1px solid rgba(74,127,212,0.25);border-radius:8px;padding:6px 10px;">
+        <div id="distance-text" style="font-size:10px;color:rgba(74,127,212,0.9);font-weight:600;"></div>
+        <div id="transfer-display" style="font-size:12px;color:#FFFFFF;font-weight:800;"></div>
+      </div>
      </div>
+    </div>
+    <!-- Buscador de dirección -->
+    <div style="margin-top:-8px;margin-bottom:20px;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="address-input" placeholder="O escribí tu barrio / dirección para calcular el traslado..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;color:#FFFFFF;outline:none;transition:border-color 0.2s ease;" onfocus="this.style.borderColor='rgba(74,127,212,0.7)'" onblur="this.style.borderColor='rgba(30,58,99,0.45)'" onkeydown="if(event.key==='Enter')searchAddress()">
+        <button onclick="searchAddress()" style="background:linear-gradient(135deg,#1E3A63,#264d84);border:none;border-radius:10px;padding:9px 14px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;transition:all 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">🔍 Buscar</button>
+      </div>
+      <div id="address-suggestions" style="display:none;margin-top:4px;background:#0d1e38;border:1px solid rgba(30,58,99,0.5);border-radius:10px;overflow:hidden;z-index:10;position:relative;"></div>
+      <div id="location-error" style="display:none;margin-top:6px;font-size:10px;color:rgba(255,100,100,0.8);font-weight:600;"></div>
     </div>
    </div>
    <div class="page-center" style="padding-top: 0; padding-bottom: 0;">
@@ -1239,6 +1245,118 @@
       const val = parseInt(document.getElementById('transfer-cost').value, 10);
       return isNaN(val) || val < 0 ? 0 : val;
     }
+
+    /* ─────────────────────────────────────────
+       CALCULADOR DE TRASLADO
+    ───────────────────────────────────────── */
+    const ATTX_LAT = -25.352944;
+    const ATTX_LNG = -57.471172;
+
+    function haversineKm(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function getTransferPrice(km) {
+      if (km <= 1)  return { price: 0,     label: 'Sin costo de traslado' };
+      if (km <= 3)  return { price: 10000, label: '10.000 Gs' };
+      if (km <= 5)  return { price: 15000, label: '15.000 Gs' };
+      if (km <= 7)  return { price: 20000, label: '20.000 Gs' };
+      if (km <= 10) return { price: 25000, label: '25.000 Gs' };
+      if (km <= 15) return { price: 35000, label: '35.000 Gs' };
+      if (km <= 20) return { price: 50000, label: '40.000 Gs' };
+      if (km <= 25) return { price: 65000, label: '55.000 Gs' };
+      return { price: 0, label: 'Consultar' };
+    }
+
+    function applyLocationResult(lat, lng, label) {
+      const km = haversineKm(lat, lng, ATTX_LAT, ATTX_LNG);
+      const kmRounded = Math.round(km * 10) / 10;
+      const { price, label: priceLabel } = getTransferPrice(km);
+      document.getElementById('transfer-cost').value = price;
+      document.getElementById('location-result').style.display = 'block';
+      document.getElementById('distance-text').textContent = kmRounded + ' km de distancia' + (label ? ' · ' + label : '');
+      if (km > 25) {
+        document.getElementById('transfer-display').textContent = 'Consultar precio (+25 km)';
+        showToast('Distancia mayor a 25 km, consultá el precio de traslado.');
+      } else if (price === 0) {
+        document.getElementById('transfer-display').textContent = '¡Sin costo de traslado! 🎉';
+        showToast('🎉 ¡Estás cerca! Sin costo de traslado.');
+      } else {
+        document.getElementById('transfer-display').textContent = 'Traslado: ' + priceLabel;
+        showToast('📍 ' + kmRounded + ' km → Traslado: ' + priceLabel);
+      }
+      document.getElementById('location-error').style.display = 'none';
+      updateTotal();
+    }
+
+    function useGPS() {
+      document.getElementById('gps-label').textContent = 'Detectando...';
+      document.getElementById('gps-btn').disabled = true;
+      document.getElementById('location-error').style.display = 'none';
+      if (!navigator.geolocation) {
+        showLocationError('Tu navegador no soporta geolocalización.');
+        resetGPSBtn(); return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          applyLocationResult(pos.coords.latitude, pos.coords.longitude, 'GPS');
+          resetGPSBtn();
+        },
+        function(err) {
+          var msg = err.code === 1 ? 'Permiso denegado. Usá la búsqueda por dirección.' : 'No se pudo obtener tu ubicación.';
+          showLocationError(msg);
+          resetGPSBtn();
+        },
+        { timeout: 10000, enableHighAccuracy: true }
+      );
+    }
+
+    function resetGPSBtn() {
+      document.getElementById('gps-label').textContent = 'Usar mi ubicación';
+      document.getElementById('gps-btn').disabled = false;
+    }
+
+    function showLocationError(msg) {
+      var el = document.getElementById('location-error');
+      el.textContent = '⚠️ ' + msg;
+      el.style.display = 'block';
+    }
+
+    async function searchAddress() {
+      var query = document.getElementById('address-input').value.trim();
+      if (!query) return;
+      document.getElementById('location-error').style.display = 'none';
+      document.getElementById('address-suggestions').style.display = 'none';
+      try {
+        var url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(query + ', Paraguay') + '&format=json&limit=5&countrycodes=py';
+        var res = await fetch(url, { headers: { 'Accept-Language': 'es' } });
+        var results = await res.json();
+        if (!results.length) { showLocationError('No se encontraron resultados. Intentá con otro nombre.'); return; }
+        if (results.length === 1) {
+          applyLocationResult(parseFloat(results[0].lat), parseFloat(results[0].lon), results[0].display_name.split(',')[0]);
+          return;
+        }
+        var suggestionsEl = document.getElementById('address-suggestions');
+        suggestionsEl.innerHTML = results.map(function(r, i) {
+          var name = r.display_name.split(',').slice(0,2).join(', ');
+          var safeName = r.display_name.split(',')[0].replace(/'/g, "\\'");
+          return '<div onclick="pickSuggestion(' + r.lat + ',' + r.lon + ',\'' + safeName + '\')" style="padding:10px 14px;font-size:11px;color:rgba(255,255,255,0.8);cursor:pointer;border-bottom:1px solid rgba(30,58,99,0.3);" onmouseover="this.style.background=\'rgba(30,58,99,0.3)\'" onmouseout="this.style.background=\'none\'">📍 ' + name + '</div>';
+        }).join('');
+        suggestionsEl.style.display = 'block';
+      } catch(e) {
+        showLocationError('Error al buscar. Verificá tu conexión a internet.');
+      }
+    }
+
+    function pickSuggestion(lat, lng, name) {
+      document.getElementById('address-suggestions').style.display = 'none';
+      document.getElementById('address-input').value = name;
+      applyLocationResult(parseFloat(lat), parseFloat(lng), name);
+    }
  
     function updateTotal() {
       const planCost   = PLANS[state.plan][state.vehicle];
@@ -1348,7 +1466,7 @@
           ${s.items.map(i => `<div style="margin-left:12px;color:rgba(13,30,56,0.8);font-size:12px;line-height:1.6;">• ${i}</div>`).join('')}
         </div>`).join('');
  
-      const content = `<html><head><title>Presupuesto ATTX</title><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:20px;}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:30px 24px;text-align:center;color:#fff;}.logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:24px 20px;}.section{margin-bottom:20px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:14px;}.planname{font-size:13px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:20px;font-weight:900;color:#1E3A63;margin-bottom:10px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:18px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}.gtotal{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:11px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:22px;font-weight:900;}.footer{text-align:center;padding:16px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:10px;color:rgba(13,30,56,0.6);}@media print{body{padding:0;background:none;}@page{margin:0;}.container{box-shadow:none;border-radius:0;}.body{padding:20px 16px;}.section{margin-bottom:16px;}}@media (max-width:600px){.body{padding:18px 16px;}.header{padding:24px 16px;}.container{border-radius:12px;}.planbox{padding:12px;}.totals{padding:16px;}.logo{font-size:20px;}.planprice{font-size:18px;}.gtamt{font-size:20px;}}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:13px;font-weight:700;color:#0d1e38;">${v}${vehicleModel ? ' — ' + vehicleModel : ''}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:16px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${(extrasCost + ventanillasCost) > 0 ? `<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost + ventanillasCost)}</span></div>` : ''}${transfer > 0 ? `<div class="trow"><span style="opacity:0.8;">🏠 Traslado a domicilio</span><span style="font-weight:700;">${formatGsFull(transfer)}</span></div>` : ''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
+      const content = `<html><head><title>Presupuesto ATTX</title><meta name="viewport" content="width=device-width,initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}body{font-family:'Montserrat',sans-serif;background:#f8f9fa;padding:20px;}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.1);}.header{background:linear-gradient(135deg,#060C17 0%,#0d1e38 100%);padding:30px 24px;text-align:center;color:#fff;}.logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:4px;}.tagline{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}.body{padding:24px 20px;}.section{margin-bottom:20px;}.stitle{font-size:10px;font-weight:700;color:rgba(13,30,56,0.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}.planbox{background:linear-gradient(135deg,#f0f5fb,#e8f0f8);border:2px solid #1E3A63;border-radius:12px;padding:14px;}.planname{font-size:13px;font-weight:800;color:#0d1e38;margin-bottom:4px;}.planprice{font-size:20px;font-weight:900;color:#1E3A63;margin-bottom:10px;}.totals{background:linear-gradient(135deg,#060C17,#0d1e38);padding:18px;border-radius:12px;color:#fff;}.trow{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}.gtotal{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);display:flex;justify-content:space-between;align-items:center;}.gtlabel{font-size:11px;font-weight:700;text-transform:uppercase;}.gtamt{font-size:22px;font-weight:900;}.footer{text-align:center;padding:16px;background:#f8f9fa;border-top:1px solid rgba(30,58,99,0.1);font-size:10px;color:rgba(13,30,56,0.6);}@media print{body{padding:0;background:none;}@page{margin:0;}.container{box-shadow:none;border-radius:0;}.body{padding:20px 16px;}.section{margin-bottom:16px;}}@media (max-width:600px){.body{padding:18px 16px;}.header{padding:24px 16px;}.container{border-radius:12px;}.planbox{padding:12px;}.totals{padding:16px;}.logo{font-size:20px;}.planprice{font-size:18px;}.gtamt{font-size:20px;}}</style></head><body><div class="container"><div class="header"><div class="logo">ATTX Detailing</div><div class="tagline">💎 Enfocados a demostrar calidad</div></div><div class="body"><div class="section"><div class="stitle">Tipo de Vehículo</div><div style="font-size:13px;font-weight:700;color:#0d1e38;">${v}${vehicleModel ? ' — ' + vehicleModel : ''}</div></div><div class="section"><div class="stitle">Plan Seleccionado</div><div class="planbox"><div class="planname">${plan}</div><div class="planprice">${formatGsFull(pCost)}</div><div>${benefitsHTML}</div></div></div>${extrasHTML}<div style="height:2px;background:linear-gradient(90deg,transparent,#1E3A63,transparent);margin:16px 0;"></div><div class="totals"><div class="trow"><span style="opacity:0.8;">Subtotal Plan</span><span style="font-weight:700;">${formatGsFull(pCost)}</span></div>${(extrasCost + ventanillasCost) > 0 ? `<div class="trow"><span style="opacity:0.8;">Subtotal Extras</span><span style="font-weight:700;">${formatGsFull(extrasCost + ventanillasCost)}</span></div>` : ''}${transfer > 0 ? `<div class="trow"><span style="opacity:0.8;">💲 Traslado a domicilio</span><span style="font-weight:700;">${formatGsFull(transfer)}</span></div>` : ''}<div class="gtotal"><span class="gtlabel">Total Estimado</span><span class="gtamt">${formatGsFull(total)}</span></div></div></div><div class="footer"><p>✓ Válido hasta <strong>${getLastDayOfMonth()}</strong></p></div></div></body></html>`;
  
       const pw = window.open('', '', 'height=800,width=900');
       pw.document.write(content);
