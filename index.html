@@ -642,8 +642,8 @@
   <!-- Toggle auto/camioneta -->
   <div style="margin-bottom:12px;">
     <div class="vehicle-toggle">
-      <button class="toggle-btn active" id="btn-auto"      onclick="selectVehicle('auto')">🚗 Auto</button>
-      <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">🚙 Camioneta</button>
+      <button class="toggle-btn active" id="btn-auto"      onclick="selectVehicle('auto')">Auto</button>
+      <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">SUV/Camioneta</button>
     </div>
   </div>
 
@@ -668,9 +668,9 @@
 
   <!-- Buscador de dirección (modo normal) -->
   <div id="address-section" style="margin-bottom:20px;">
-    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">📍 Buscar dirección o pegar coordenadas de Maps</div>
+    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Buscar dirección o pegar coordenadas de Maps</div>
     <div style="display:flex;gap:8px;align-items:center;">
-      <input type="text" id="address-input" placeholder="Ej: Barrio San Pablo, Capiatá  ·  o pegá: -25.35, -57.47"
+      <input type="text" id="address-input" placeholder="Ej: Barrio Torremolinos, Capiatá  ·  o pegá: -25.35, -57.47"
         style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:9px 12px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;color:#FFF;outline:none;transition:border-color 0.2s ease;"
         onfocus="this.style.borderColor='rgba(74,127,212,0.7)'" onblur="this.style.borderColor='rgba(30,58,99,0.45)'"
         onkeydown="if(event.key==='Enter')searchAddress()">
