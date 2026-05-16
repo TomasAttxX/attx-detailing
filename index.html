@@ -25,14 +25,11 @@
       overflow-x: hidden;
     }
 
-    /* Fondo con grilla sutil */
+    /* Fondo limpio */
     .bg-grid {
       position: fixed; inset: 0;
       background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,127,212,0.08) 0%, transparent 60%),
-        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-      background-size: 100% 100%, 48px 48px, 48px 48px;
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(74,127,212,0.08) 0%, transparent 60%);
       pointer-events: none; z-index: 0;
     }
 
@@ -295,7 +292,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    .action-buttons { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: stretch; }
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: stretch; }
 
     .btn-screenshot {
       background: rgba(255,255,255,0.07); color: #FFF;
@@ -534,44 +531,19 @@
     <!-- Detalle de planes -->
     <div class="sidebar-section">
       <div class="sidebar-title" style="color:#FFF;">⭐ Detalle de planes</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-
-        <div class="plan-card plan-express" style="min-width:auto;cursor:pointer;padding:11px 12px;" onclick="openPlanModal('express')">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="plan-icon-wrap" style="width:20px;height:20px;margin-bottom:0;">
-              <i data-lucide="zap" style="width:13px;height:13px;color:#7a8a9a;"></i>
-            </div>
-            <div class="plan-title" style="font-size:12px;margin-bottom:0;font-weight:600;">Plan Express</div>
-          </div>
-        </div>
-
-        <div class="plan-card plan-detallado" style="min-width:auto;cursor:pointer;padding:11px 12px;" onclick="openPlanModal('detallado')">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="plan-icon-wrap" style="background:rgba(74,127,212,0.15);width:20px;height:20px;margin-bottom:0;">
-              <i data-lucide="sparkles" style="width:13px;height:13px;color:#6aa3f5;"></i>
-            </div>
-            <div class="plan-title" style="font-size:12px;margin-bottom:0;font-weight:600;">Plan Detallado</div>
-          </div>
-        </div>
-
-        <div class="plan-card plan-premium" style="min-width:auto;cursor:pointer;padding:11px 12px;background:linear-gradient(145deg,rgba(212,165,116,0.12) 0%,rgba(13,30,56,0.15) 100%);" onclick="openPlanModal('premium')">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="plan-icon-wrap" style="background:rgba(212,165,116,0.15);width:20px;height:20px;margin-bottom:0;">
-              <i data-lucide="crown" style="width:13px;height:13px;color:#d4a574;"></i>
-            </div>
-            <div class="plan-title" style="font-size:12px;margin-bottom:0;font-weight:600;">Plan Premium+</div>
-          </div>
-        </div>
-
-        <div class="plan-card plan-interior" style="min-width:auto;cursor:pointer;padding:11px 12px;" onclick="openPlanModal('interior')">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="plan-icon-wrap" style="background:rgba(34,197,94,0.15);width:20px;height:20px;margin-bottom:0;">
-              <i data-lucide="droplets" style="width:13px;height:13px;color:#4ade80;"></i>
-            </div>
-            <div class="plan-title" style="font-size:12px;margin-bottom:0;font-weight:600;">Interior Premium</div>
-          </div>
-        </div>
-
+      <div class="contact-buttons">
+        <button class="contact-btn" onclick="openPlanModal('express')" style="background:rgba(122,138,154,0.12);color:#d0d8e0;border-color:rgba(122,138,154,0.35);">
+          <i data-lucide="zap" style="width:14px;height:14px;color:#7a8a9a;"></i> Plan Express
+        </button>
+        <button class="contact-btn" onclick="openPlanModal('detallado')" style="background:rgba(74,127,212,0.12);color:#a8c4f5;border-color:rgba(74,127,212,0.35);">
+          <i data-lucide="sparkles" style="width:14px;height:14px;color:#6aa3f5;"></i> Plan Detallado
+        </button>
+        <button class="contact-btn" onclick="openPlanModal('premium')" style="background:rgba(212,165,116,0.12);color:#e8c99a;border-color:rgba(212,165,116,0.35);">
+          <i data-lucide="crown" style="width:14px;height:14px;color:#d4a574;"></i> Plan Premium+
+        </button>
+        <button class="contact-btn" onclick="openPlanModal('interior')" style="background:rgba(34,197,94,0.1);color:#86efac;border-color:rgba(34,197,94,0.35);">
+          <i data-lucide="droplets" style="width:14px;height:14px;color:#4ade80;"></i> Interior Premium
+        </button>
       </div>
     </div>
 
@@ -644,15 +616,15 @@
   <!-- Toggle auto/camioneta -->
   <div style="margin-bottom:12px;">
     <div class="vehicle-toggle">
-      <button class="toggle-btn active" id="btn-auto"      onclick="selectVehicle('auto')">🚗 Auto</button>
-      <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">🚙 Camioneta</button>
+      <button class="toggle-btn active" id="btn-auto"      onclick="selectVehicle('auto')">Auto</button>
+      <button class="toggle-btn inactive" id="btn-camioneta" onclick="selectVehicle('camioneta')">SUV/Camioneta</button>
     </div>
   </div>
 
   <!-- Modelo del vehículo + GPS -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
     <div>
-      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🚗 Modelo del vehículo</div>
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Modelo del vehículo</div>
       <input type="text" id="vehicle-model" placeholder="Ej: Toyota Corolla"
         style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(30,58,99,0.45);border-radius:10px;padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:500;color:#FFF;outline:none;transition:border-color 0.2s ease;"
         onfocus="this.style.borderColor='rgba(74,127,212,0.7)'" onblur="this.style.borderColor='rgba(30,58,99,0.45)'">
@@ -949,9 +921,6 @@
         <i data-lucide="clipboard-copy" style="width:13px;height:13px;"></i>
         <span id="copy-btn-text">Copiar</span>
       </button>
-      <button class="btn-screenshot" onclick="screenshotBudget()" title="Guardar como imagen">
-        <i data-lucide="camera" style="width:16px;height:16px;"></i>
-      </button>
       <button class="btn-print" id="print-btn-el" onclick="printBudget()">
         <i data-lucide="printer" style="width:13px;height:13px;color:#0d1e38;"></i>
         <span id="print-btn-text">Imprimir</span>
@@ -1216,12 +1185,24 @@
      PRECIOS DEL CARRUSEL
   ═══════════════════════════════════════ */
   function updatePlanPrices() {
+    // Tarjetas originales (tienen ID)
     ['express', 'detallado', 'premium'].forEach((id, i) => {
       const el = document.getElementById(`plan${i + 1}-price-main`);
       if (el) el.textContent = formatGs(PLANS[id][state.vehicle]);
     });
     const el4 = document.getElementById('plan4-price-main');
     if (el4) el4.textContent = formatGs(PLANS.interior[state.vehicle]);
+
+    // Clones (no tienen ID, usan data-clone-plan)
+    const scroll = document.getElementById('plans-scroll');
+    if (scroll) {
+      PLAN_IDS.forEach(id => {
+        const price = formatGs(PLANS[id][state.vehicle]);
+        scroll.querySelectorAll(`[data-clone-plan="${id}"] .plan-price-main`).forEach(el => {
+          el.textContent = price;
+        });
+      });
+    }
 
     const price3El = document.getElementById('price-3');
     if (price3El && !document.getElementById('extra-3').classList.contains('included'))
@@ -1440,7 +1421,7 @@
   ═══════════════════════════════════════ */
   function copyBudget() {
     const vEmoji      = state.vehicle === 'auto' ? '🚗' : '🚙';
-    const vLabel      = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+    const vLabel      = state.vehicle === 'auto' ? 'Auto' : 'SUV/Camioneta';
     const vehicleModel = (document.getElementById('vehicle-model').value || '').trim();
     const plan        = PLANS[state.plan].name;
     const pCost       = PLANS[state.plan][state.vehicle];
@@ -1448,69 +1429,60 @@
     const isInterior  = state.plan === 'interior';
     const planData    = PLAN_BENEFITS[state.plan];
     const planEmoji   = { express: '⚡', detallado: '✨', premium: '👑', interior: '🫧' }[state.plan] || '✨';
+
     const extraNames  = {
       1: 'Lluvia ácida en retrovisores',
-      2: 'Limpieza de techo',
+      2: 'Limpieza de techo interior',
       3: 'Limpieza y desinfección de tapizados',
       4: 'Lluvia ácida en ventanillas'
     };
 
-    const LINE = '─────────────────────────────';
-    const lines = [
-      '╔═══════════════════════════╗',
-      '      ATTX Detailing 💎',
-      '      Presupuesto Estimado',
-      '╚═══════════════════════════╝',
-      '',
-      `${vEmoji} ${vLabel}${vehicleModel ? ' · ' + vehicleModel : ''}`,
-      '',
-      `${planEmoji} *${plan}*  (${planData.time})`,
-      `   Precio base: ${formatGs(pCost)}`,
-    ];
-
-    // Servicios incluidos
-    lines.push('');
-    lines.push('📋 Incluye:');
-    planData.benefits.forEach(section => {
-      if (planData.benefits.length > 1) lines.push(`   ${section.label}:`);
-      section.items.forEach(item => lines.push(`   • ${item}`));
-    });
+    // Calcular totales
+    const extrasCost      = isInterior ? 0 : [1,2].reduce((s,n) => s+(state.extras[n]?EXTRAS[n]:0), 0);
+    const extra3Cost      = isInterior ? 0 : (state.extras[3] ? EXTRAS_3[state.vehicle] : 0);
+    const ventanillasCost = isInterior ? 0 : (state.extras[4] ? state.qty * VENTANILLA_PRICE : 0);
+    const total           = pCost + extrasCost + extra3Cost + ventanillasCost + transfer;
 
     // Extras activos
+    const extrasActivos = [];
     if (!isInterior) {
-      const extraNamesMap = [
-        { n: 1, label: extraNames[1], cost: EXTRAS[1] },
-        { n: 2, label: extraNames[2], cost: EXTRAS[2] },
-        { n: 3, label: extraNames[3], cost: EXTRAS_3[state.vehicle] },
-        { n: 4, label: `${extraNames[4]} ×${state.qty}`, cost: state.qty * VENTANILLA_PRICE },
-      ];
-      const active = extraNamesMap.filter(e => state.extras[e.n]);
-      if (active.length > 0) {
-        lines.push('');
-        lines.push('➕ Servicios adicionales:');
-        active.forEach(e => lines.push(`   • ${e.label}: ${formatGs(e.cost)}`));
-      }
+      [1,2,3,4].forEach(n => {
+        if (!state.extras[n]) return;
+        const price = n===4 ? state.qty*VENTANILLA_PRICE : (n===3 ? EXTRAS_3[state.vehicle] : EXTRAS[n]);
+        const label = n===4 ? `${extraNames[n]} ×${state.qty}` : extraNames[n];
+        extrasActivos.push(`  • ${label}: ${formatGs(price)}`);
+      });
+    }
+
+    const lines = [
+      `💎 *ATTX Detailing — Presupuesto*`,
+      ``,
+      `${vEmoji} *${vLabel}${vehicleModel ? ' — ' + vehicleModel : ''}*`,
+      ``,
+      `${planEmoji} *${plan}*`,
+      `   ⏱ Duración: ${planData.time}`,
+      `   💵 Precio base: ${formatGs(pCost)}`,
+    ];
+
+    if (extrasActivos.length > 0) {
+      lines.push(``, `➕ *Servicios adicionales:*`);
+      extrasActivos.forEach(e => lines.push(e));
     }
 
     if (transfer > 0) {
-      lines.push('');
-      lines.push(`🚘 Traslado a domicilio: ${formatGs(transfer)}`);
+      lines.push(``, `🏠 Traslado a domicilio: ${formatGs(transfer)}`);
     }
 
-    const extrasTotal = isInterior ? 0 : (
-      [1,2].reduce((s,n) => s + (state.extras[n] ? EXTRAS[n] : 0), 0) +
-      (state.extras[3] ? EXTRAS_3[state.vehicle] : 0) +
-      (state.extras[4] ? state.qty * VENTANILLA_PRICE : 0)
+    lines.push(
+      ``,
+      `─────────────────────`,
+      `💵 *TOTAL: ${formatGs(total)}*`,
+      `─────────────────────`,
+      ``,
+      `📅 Válido hasta: ${getLastDayOfMonth()}`,
+      ``,
+      `        💎 ATTX Detailing`
     );
-    const total = pCost + extrasTotal + transfer;
-
-    lines.push('');
-    lines.push(LINE);
-    lines.push(`💵 TOTAL: ${formatGs(total)}`);
-    lines.push(LINE);
-    lines.push('');
-    lines.push(`📅 Válido hasta: ${getLastDayOfMonth()}`);
-    lines.push('📞 ATTX Detailing · Enfocados en calidad 💎');
 
     const text = lines.join('\n');
     if (navigator.clipboard?.writeText) {
@@ -1533,7 +1505,7 @@
      accent fijo: #1E3A63 (azul oscuro ATTX).
   ═══════════════════════════════════════ */
   function buildReceiptHTML(logoSrc) {
-    const v            = state.vehicle === 'auto' ? 'Auto' : 'Camioneta';
+    const v            = state.vehicle === 'auto' ? 'Auto' : 'SUV/Camioneta';
     const vehicleModel = (document.getElementById('vehicle-model').value || '').trim();
     const transfer     = getTransferCost();
     const plan         = PLANS[state.plan].name;
@@ -1610,9 +1582,9 @@
         .t-total{display:flex;justify-content:space-between;align-items:center;}
         .t-total-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
         .t-total-amount{font-size:24px;font-weight:900;letter-spacing:-0.5px;}
-        .footer{background:#f8f9fa;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e5e7eb;}
-        .f-validity{font-size:10px;color:#6b7280;}
-        .f-brand{font-size:10px;font-weight:700;color:${accent};}
+        .footer{background:#f8f9fa;padding:14px 22px;border-top:1px solid #e5e7eb;text-align:center;}
+        .f-brand{font-size:13px;font-weight:800;color:#1E3A63;letter-spacing:0.5px;}
+        .f-validity{font-size:9px;color:#9ca3af;margin-top:4px;}
         /* Marca de agua solo al imprimir */
         .watermark{display:none;position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999;}
         .wm-text{position:absolute;font-family:'Montserrat',sans-serif;font-size:28px;font-weight:900;color:rgba(30,58,99,0.06);letter-spacing:8px;white-space:nowrap;transform:rotate(-38deg);user-select:none;}
@@ -1658,7 +1630,7 @@
           <div class="totals-box">
             <div class="t-row"><span>Subtotal plan</span><span>${formatGs(pCost)}</span></div>
             ${(extrasCost+extra3Cost+ventanillasCost)>0 ? `<div class="t-row"><span>Subtotal extras</span><span>${formatGs(extrasCost+extra3Cost+ventanillasCost)}</span></div>` : ''}
-            ${transfer>0 ? `<div class="t-row"><span>Traslado a domicilio</span><span>${formatGs(transfer)}</span></div>` : ''}
+            ${transfer>0 ? `<div class="t-row"><span>💲 Traslado a domicilio</span><span>${formatGs(transfer)}</span></div>` : ''}
             <div class="t-divider"></div>
             <div class="t-total">
               <span class="t-total-label">Total estimado</span>
@@ -1667,8 +1639,7 @@
           </div>
         </div>
         <div class="footer">
-          <span class="f-validity">Los valores se confirman al momento del servicio</span>
-          <span class="f-brand">ATTX Detailing</span>
+          <div class="f-validity">© 2026 ATTX Detailing ™. Todos los derechos reservados.</div>
         </div>
       </div>
       <script>(function(){
@@ -1877,20 +1848,17 @@
   })();
 
   /* ═══════════════════════════════════════
-     AUTO-ROTACION DE PLANES (para cuando el usuario aún no eligió)
-  ═══════════════════════════════════════ */
-  /* ═══════════════════════════════════════
      CARRUSEL INFINITO DE PLANES
-     - Clona las tarjetas (x3) para scroll sin fin
-     - Auto-rotación suave hasta que el usuario elige
-     - Al elegir: se centra la tarjeta seleccionada
+     Layout: [pre-0][pre-1][ORIGINALS][post-0][post-1]  (5 sets)
+     Zona segura: scrollLeft en [setW, 3*setW]
+     Wrap invisible: si sale de esa zona, teleport ±2*setW
   ═══════════════════════════════════════ */
   const CAR = {
-    raf: null,       // requestAnimationFrame handle
-    running: false,  // auto-rotación activa
-    pos: 0,          // scrollLeft actual
-    speed: 0.18,     // px por frame — muy suave y lento
-    setWidth: 0      // ancho de un set (4 cards)
+    raf: null,
+    running: false,
+    speed: 0.18,
+    setWidth: 0,
+    wrapping: false   // flag para evitar bucles en el listener
   };
 
   const PLAN_IDS = ['express', 'detallado', 'premium', 'interior'];
@@ -1899,68 +1867,79 @@
     const scroll = document.getElementById('plans-scroll');
     if (!scroll) return;
 
-    // Guardar originales antes de clonar
     const originals = [...scroll.querySelectorAll('.plan-card[data-plan-id]')];
 
-    // Crear copias ANTES (set A) y DESPUÉS (set B)
     function makeCloneSet(prefix) {
       return originals.map((card, i) => {
         const clone = card.cloneNode(true);
         const planId = PLAN_IDS[i];
-        // Quitar IDs para no duplicarlos
         clone.removeAttribute('id');
+        clone.removeAttribute('data-plan-id');           // evitar conflicto con querySelector
         clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-        // Marcar como clon para sincronizar estilos
         clone.dataset.clonePlan = planId;
         clone.dataset.cloneSet  = prefix;
-        // Click redirige al original
         clone.onclick = () => selectPlan(planId, true);
         return clone;
       });
     }
 
-    const setA = makeCloneSet('a');
-    const setB = makeCloneSet('b');
+    // Insertar 2 sets ANTES — referencia fija a originals[0] para no romper el orden
+    const firstOriginal = originals[0];
+    for (let s = 1; s >= 0; s--) {
+      const set = makeCloneSet('pre' + s);
+      set.forEach(c => scroll.insertBefore(c, firstOriginal));
+    }
+    // Insertar 2 sets DESPUÉS
+    for (let s = 0; s < 2; s++) {
+      const set = makeCloneSet('post' + s);
+      set.forEach(c => scroll.appendChild(c));
+    }
 
-    // Insertar: [setA][originales][setB]
-    setA.forEach(c => scroll.insertBefore(c, originals[0]));
-    setB.forEach(c => scroll.appendChild(c));
-
-    // Calcular ancho de un set tras un frame de layout
     requestAnimationFrame(() => {
-      const firstOrig  = originals[0];
-      const firstClone = setA[0];
-      CAR.setWidth = firstOrig.offsetLeft - firstClone.offsetLeft;
+      // Medir ancho de un set (distancia entre tarjeta 0 y tarjeta 4)
+      const allCards = [...scroll.querySelectorAll('.plan-card')];
+      if (allCards.length < 5) return;
+      CAR.setWidth = allCards[4].offsetLeft - allCards[0].offsetLeft;
+      if (CAR.setWidth === 0) return;
 
-      // Posicionar en el set del medio
-      scroll.scrollLeft = CAR.setWidth;
-      CAR.pos = CAR.setWidth;
+      // Posición inicial: los originales están en el índice 2 → 2*setWidth
+      scroll.scrollLeft = 2 * CAR.setWidth;
 
-      // Sincronizar estilos de los clones con el plan ya seleccionado
       syncPlanClones();
-
-      // Centrar el plan seleccionado por defecto — instantáneo, sin animación
       centerSelectedPlan(state.plan, false);
 
-      // Iniciar auto-rotación con un pequeño delay para que el centrado se asiente
-      setTimeout(() => startCarouselAuto(), 700);
+      // Listener de scroll para wrap invisible en scroll manual
+      scroll.addEventListener('scroll', () => {
+        if (CAR.wrapping || CAR.setWidth === 0) return;
+        const pos = scroll.scrollLeft;
+        if (pos < CAR.setWidth) {
+          CAR.wrapping = true;
+          scroll.scrollLeft = pos + 2 * CAR.setWidth;
+          CAR.wrapping = false;
+        } else if (pos > 3 * CAR.setWidth) {
+          CAR.wrapping = true;
+          scroll.scrollLeft = pos - 2 * CAR.setWidth;
+          CAR.wrapping = false;
+        }
+      }, { passive: true });
 
-      // Touch manual detiene la rotación
-      scroll.addEventListener('touchstart', () => stopCarouselAuto(), { passive: true, once: false });
+      // Detener auto-rotación en touch manual
+      scroll.addEventListener('touchstart', stopCarouselAuto, { passive: true });
+
+      setTimeout(() => startCarouselAuto(), 700);
     });
   }
 
   function carouselStep() {
     const scroll = document.getElementById('plans-scroll');
     if (scroll && CAR.running && CAR.setWidth > 0) {
-      CAR.pos += CAR.speed;
-      // Teleport invisible: al entrar al set B, volver al mismo punto en el set del medio
-      if (CAR.pos >= CAR.setWidth * 2) {
-        CAR.pos -= CAR.setWidth;
-        scroll.scrollLeft = CAR.pos; // sin smooth → instantáneo
-      } else {
-        scroll.scrollLeft = CAR.pos;
-      }
+      let next = scroll.scrollLeft + CAR.speed;
+      // Wrap en auto-rotación (siempre va hacia la derecha)
+      if (next > 3 * CAR.setWidth) next -= 2 * CAR.setWidth;
+      // Asignar sin smooth para que sea invisible
+      CAR.wrapping = true;
+      scroll.scrollLeft = next;
+      CAR.wrapping = false;
     }
     CAR.raf = requestAnimationFrame(carouselStep);
   }
@@ -1974,38 +1953,41 @@
     CAR.running = false;
   }
 
-  /* Centrar la tarjeta seleccionada en el scroll
-     animate=true → transición suave (al elegir)
-     animate=false → instantáneo (al arrancar) */
+  /* Centrar la tarjeta seleccionada
+     animate=true → suave | animate=false → instantáneo */
   function centerSelectedPlan(planId, animate = true) {
     const scroll = document.getElementById('plans-scroll');
     const card   = document.getElementById('plan-' + planId);
-    if (!scroll || !card) return;
+    if (!scroll || !card || CAR.setWidth === 0) return;
 
     const cardCenter   = card.offsetLeft + card.offsetWidth / 2;
     const scrollCenter = scroll.clientWidth / 2;
-    const target       = Math.max(CAR.setWidth * 0.25, cardCenter - scrollCenter);
+    let target = cardCenter - scrollCenter;
+
+    // Asegurarse de que el target quede en zona segura [setW, 3*setW]
+    if (target < CAR.setWidth)       target += 2 * CAR.setWidth;
+    if (target > 3 * CAR.setWidth)   target -= 2 * CAR.setWidth;
 
     if (animate) {
-      // Desactivar scroll-snap para que la transición sea limpia
       scroll.style.scrollSnapType = 'none';
       scroll.style.scrollBehavior = 'smooth';
+      CAR.wrapping = true;
       scroll.scrollLeft = target;
-      CAR.pos = target;
+      CAR.wrapping = false;
       setTimeout(() => {
         scroll.style.scrollBehavior = '';
         scroll.style.scrollSnapType = '';
       }, 520);
     } else {
       scroll.style.scrollBehavior = 'auto';
+      CAR.wrapping = true;
       scroll.scrollLeft = target;
-      CAR.pos = target;
+      CAR.wrapping = false;
       requestAnimationFrame(() => { scroll.style.scrollBehavior = ''; });
     }
   }
 
-  /* Sincronizar estado visual (selected/blurred/borderColor/boxShadow)
-     de los clones con el original correspondiente */
+  /* Sincronizar estado visual de clones con sus originales */
   function syncPlanClones() {
     const scroll = document.getElementById('plans-scroll');
     if (!scroll) return;
@@ -2013,15 +1995,12 @@
       const orig = document.getElementById('plan-' + id);
       if (!orig) return;
       const origInd = orig.querySelector('.plan-select-indicator');
-      const origChk = orig.querySelector('[id^="check-"]') || orig.querySelector('i[data-lucide="check"]');
 
       scroll.querySelectorAll(`[data-clone-plan="${id}"]`).forEach(clone => {
-        // Copiar clases de estado
-        clone.className     = orig.className;
+        clone.className         = orig.className;
         clone.style.borderColor = orig.style.borderColor;
         clone.style.boxShadow   = orig.style.boxShadow;
 
-        // Sincronizar indicador
         const cloneInd = clone.querySelector('.plan-select-indicator');
         if (origInd && cloneInd) {
           cloneInd.style.background  = origInd.style.background;
@@ -2030,6 +2009,7 @@
         }
 
         // Sincronizar check icon
+        const origChk  = orig.querySelector('i[data-lucide="check"]');
         const cloneChk = clone.querySelector('i[data-lucide="check"]');
         if (origChk && cloneChk) {
           cloneChk.style.display = origChk.style.display;
